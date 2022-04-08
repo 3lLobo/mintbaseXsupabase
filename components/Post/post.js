@@ -54,6 +54,7 @@ export default function Post({ nft }) {
             overflowY: "auto",
             maxH: 400,
             overflowX: "hidden",
+            
         },
         footer: {
             height: 64,
