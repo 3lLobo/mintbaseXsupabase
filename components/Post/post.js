@@ -22,16 +22,17 @@ import {
     IconButton,
     Heading,
 } from "@chakra-ui/react";
-import { ArrowDownIcon, ArrowUpIcon, StarIcon } from "@chakra-ui/icons";
-import { HiShoppingBag } from "react-icons/hi";
+import { GiCrownedHeart } from "react-icons/gi";
+import {MdOutlineThumbDown, MdOutlineThumbUp, MdOutlineThumbUpAlt, MdOutlineThumbUpOffAlt} from "react-icons/md"
 import { useState, useEffect } from "react";
 import useCustomToast from "../../hooks/useCustomToast";
 import TimeAgo from "timeago-react";
 
 
 export default function Post({ nft }) {
-    const postBg = useColorModeValue("#edf2f7", "#171923");
 
+
+    const postBg = useColorModeValue("#edf2f7", "#171923");
     const styles = {
         // fontFamily: "poppings",
         backgroundColor: postBg,
@@ -57,7 +58,7 @@ export default function Post({ nft }) {
             
         },
         footer: {
-            height: 64,
+            // height: 64,
             display: "flex",
             alignItems: "center",
         },
@@ -77,11 +78,11 @@ export default function Post({ nft }) {
                     name={nft.minter}
                     src={nft.thing.store.iconBase64}
                     size="sm"
-                    onClick={console.log("Show all NFTs from this store")}
+                    // onClick={console.log("Show all NFTs from this store")}
                 />
                 <Button
                 className="ml-auto"
-                    onClick={console.log("Show all NFTs from this minter!")}
+                    // onClick={console.log("Show all NFTs from this minter!")}
                     my={2}
                 >{nft.minter}
                 </Button>
@@ -112,23 +113,26 @@ export default function Post({ nft }) {
             <Divider />
             <Box p={2} style={styles.footer}>
                 <IconButton
-                    icon={<StarIcon />}
+                className="mr-3"
+                    icon={<MdOutlineThumbUp />}
                     isRound
-                    onClick={console.log("Add to favorites")}
+                    // onClick={console.log("Add to favorites")}
                 >
                 </IconButton>
                 <Text> 1 </Text>
                 <IconButton
-                    icon={<ArrowDownIcon />}
+                className="mr-3 ml-3"
+                    icon={<MdOutlineThumbDown />}
                     isRound
-                    onClick={console.log("Dislike NFT")}
+                    // onClick={console.log("Dislike NFT")}
                 >
                 </IconButton>
                 <Text> 3 </Text>
                 <IconButton
-                    icon={<ArrowUpIcon />}
+                className="ml-auto h-6 mr-3"
+                    icon={<GiCrownedHeart className="fill-red-500"/>}
                     isRound
-                    onClick={console.log("Like NFT")}
+                    // onClick={console.log("Like NFT")}
                 >
                 </IconButton>
                 <Text> 111 </Text>
@@ -138,7 +142,7 @@ export default function Post({ nft }) {
             >
                 <Button
                     className="ml-auto mr-1"
-                    onClick={console.log("Filter for this media type!")}
+                    // onClick={console.log("Filter for this media type!")}
                 >
                     {nft.thing.metadata.media_type}
                 </Button>
