@@ -10,8 +10,8 @@ import '../styles/globals.css'
 import utils from '@tailwindcss/typography/src/utils'
 
 // 2. Extend the theme to include custom colors, fonts, etc
-const colors = {
-  brand: {
+const brand = {
+  colors : {
     900: '#1a365d',
     800: '#153e75',
     700: '#2a69ac',
@@ -21,7 +21,7 @@ const colors = {
     body: "Work Sans",
   },
 }
-const theme = extendTheme({ colors });
+const theme = extendTheme({ brand });
 const mintbaseClient = createApolloClient();
 
 export default function MyApp({ Component, pageProps }) {

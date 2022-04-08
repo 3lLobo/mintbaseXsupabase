@@ -11,7 +11,7 @@ import { SignOut, useUser } from '../../hooks/authUser'
 export default function Header() {
     const { user } = useUser()
     return (
-        <Disclosure as="nav" className="bg-gray-800">
+        <Disclosure as="nav" className="bg-neutral-900">
             {({ open }) => (
                 <>
                     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
