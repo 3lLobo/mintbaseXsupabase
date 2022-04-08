@@ -4,21 +4,23 @@ import { UserCircleIcon } from '@heroicons/react/outline'
 import classNames from '../../utils/classsesNames'
 import { SignOut } from '../../hooks/authUser'
 
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, DarkMode } from '@chakra-ui/react'
 
 
-const MenuLogado = ({user}) => (
+const MenuLogado = ({ user }) => (
   <Menu as="div" className="ml-3 relative">
     {({ open }) => (
       <Box>
         <Box className='flex'>
-          <Text className='mr-3 mt-0.5'>
-            {user.user_metadata.full_name || "AngryPanda" }
-          </Text>
-          <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-            <span className="sr-only">Open user menu</span>
-            <UserCircleIcon className="h-8 w-8 text-white" />
-          </Menu.Button>
+          <DarkMode>
+            <Text className='mr-3 mt-0.5 color-white text-slate-50 decoration-4'>
+              {user.user_metadata.full_name || "AngryPanda"}
+            </Text>
+            <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+              <span className="sr-only">Open user menu</span>
+              <UserCircleIcon className="h-8 w-8 text-white" />
+            </Menu.Button>
+          </DarkMode>
         </Box>
         <Transition
           show={open}

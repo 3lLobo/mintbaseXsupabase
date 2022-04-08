@@ -6,7 +6,6 @@ import Header from '../components/Header'
 import Head from '../components/Head'
 
 export default function Profile() {
-  RequireAuth()
 
   const { user } = useUser()
 

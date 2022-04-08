@@ -1,5 +1,6 @@
 import React from 'react'
 import { UserContextProvider } from '../hooks/authUser'
+import { ThemeProvider } from "next-themes";
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
 import { ApolloProvider } from '@apollo/client'
@@ -7,7 +8,6 @@ import { createApolloClient } from "../utils/initApollo"
 
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
-import utils from '@tailwindcss/typography/src/utils'
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const brand = {
@@ -20,6 +20,12 @@ const brand = {
     heading: "Poppins",
     body: "Work Sans",
   },
+  colors: {
+    lightblack: "#1E2021",
+    gray: {
+      800: "#131414",
+    }
+  }
 }
 const theme = extendTheme({ brand });
 const mintbaseClient = createApolloClient();
@@ -30,7 +36,9 @@ export default function MyApp({ Component, pageProps }) {
       <UserContextProvider>
         <ApolloProvider client={mintbaseClient}>
           <ChakraProvider theme={theme}>
-            <Component {...pageProps} />
+            <ThemeProvider attribute="class">
+              <Component {...pageProps} />
+            </ThemeProvider>
           </ChakraProvider>
         </ApolloProvider>
       </UserContextProvider>

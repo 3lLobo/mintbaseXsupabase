@@ -4,7 +4,9 @@ import { Text, Box, Center, Image, Heading, HStack, Button } from '@chakra-ui/re
 
 
 const Index = () => {
-  
+
+  const {user} = useUser();
+
   return (
     <Box>
       <Head />
