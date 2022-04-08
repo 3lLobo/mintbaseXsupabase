@@ -19,8 +19,10 @@ import {
     Avatar,
     Divider,
     Icon,
+    Input,
     IconButton,
     Heading,
+    Stack,
 } from "@chakra-ui/react";
 import { GiCrownedHeart } from "react-icons/gi";
 import { MdOutlineThumbDown, MdOutlineThumbUp, MdOutlineThumbUpAlt, MdOutlineThumbUpOffAlt } from "react-icons/md"
@@ -87,10 +89,16 @@ export default function Post({ nft }) {
                     // onClick={console.log("Show all NFTs from this store")}
                     />
                     <Button
-                        className="ml-auto"
+                        className="mr-auto ml-3"
                         // onClick={console.log("Show all NFTs from this minter!")}
                         my={2}
                     >{nft.minter}
+                    </Button>
+                    <Button
+                        className="ml-3 mr-1"
+                    // onClick={console.log("Filter for this media type!")}
+                    >
+                        {nft.thing.metadata?.media_type}
                     </Button>
                 </Box>
                 <Text
@@ -104,6 +112,7 @@ export default function Post({ nft }) {
             </Heading>
             <Box mb={1} style={styles.content} className="flex">
                 <ChakraImage
+                // onClick="The image should pop up and fill the whole screen"
                     maxH={200}
                     rounded="lg"
                     maxWidth={["100%", "400px", "225px"]}
@@ -146,13 +155,16 @@ export default function Post({ nft }) {
             <Box
                 className=" mr-1 flex"
             >
-                <Button
-                    className="ml-auto mr-1"
-                // onClick={console.log("Filter for this media type!")}
-                >
-                    {nft.thing.metadata?.media_type}
-                </Button>
+                <Input variant='filled' placeholder='Commnet' />
+                <IconButton>Send!</IconButton>
             </Box>
+            <Stack>
+                <Text>Latest Comment</Text>
+                <Text>More Comments</Text>
+                <Text>Perhaps make an component for Comments.</Text>
+                <Text>The comment Author and date also need to fit here.</Text>
+                <Text>First Comment</Text>
+            </Stack>
 
         </Box>
     );
