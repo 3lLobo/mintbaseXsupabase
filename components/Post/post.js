@@ -29,7 +29,7 @@ import { MdOutlineThumbDown, MdOutlineThumbUp, MdOutlineThumbUpAlt, MdOutlineThu
 import { useState, useEffect } from "react";
 import useCustomToast from "../../hooks/useCustomToast";
 import TimeAgo from "timeago-react";
-import { supabaseNftData } from "../../utils/supabaseGraph";
+import { supabaseNftData } from "../../utils/supabaseQueries";
 
 
 export default function Post({ nft }) {

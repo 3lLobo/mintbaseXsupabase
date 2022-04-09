@@ -1,5 +1,4 @@
-import { ApolloClient, HttpLink, InMemoryCache, useQuery, gql } from '@apollo/client'
-
+import { ApolloClient, HttpLink, InMemoryCache, useMutation, gql } from '@apollo/client'
 
 const supabaseClient = new ApolloClient({
     ssrMode: typeof window === 'undefined',
@@ -14,41 +13,19 @@ const supabaseClient = new ApolloClient({
     cache: new InMemoryCache(),
 })
 
-const GET_NFT_DATA = gql`
-query Query($filter: NftFilter) {
-    nftCollection(filter: $filter) {
-      edges {
-        node {
-          likes
-          comments
-          commnetCollection {
-            edges {
-              node {
-                text
-                user_id
-                users {
-                  first_name
-                  last_name
-                }
-              }
-            }
-          }
-          likeCollection {
-            edges {
-              cursor
-              node {
-                value
-                users {
-                  id
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`
+export function supabaseSetNftData() {
+    const [ addNftData, { data}] = useMutation(
+    NFT_MUTATION, {
+        client: supabaseClient,
+        variables: {
+            "objects": null,
+            "insertIntoLikeCollectionObjects2": null,
+            "insertIntoNftCollectionObjects2": null
+        },
+        onError: ((error) => console.log("Supabase Mutation Error: ", error))
+    })
+}
+
 
 export function supabaseNftData(nftId) {
 
