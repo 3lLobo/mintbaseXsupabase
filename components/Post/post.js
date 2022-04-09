@@ -29,18 +29,32 @@ import { MdOutlineThumbDown, MdOutlineThumbUp, MdOutlineThumbUpAlt, MdOutlineThu
 import { useState, useEffect } from "react";
 import useCustomToast from "../../hooks/useCustomToast";
 import TimeAgo from "timeago-react";
-import { supabaseNftData } from "../../utils/supabaseQueries";
-import { supabaseInsertNft } from "../../utils/supabaseFncs";
+import {
+    supabaseNftData,
+    supabaseInsertNft,
+    supabaseInsertLike,
+    supabaseInsertComment,
+    supabaseDeleteComment,
+    supabaseDeleteLike
+} from "../../utils/supabaseFncs";
 import { mintbaseNetwork } from '../../utils/initApolloMintbase'
+import { useUser } from "../../hooks/authUser";
 
 
 export default function Post({ nft }) {
     const postBg = useColorModeValue("#edf2f7", "#171923");
+    const user = useUser()
 
+    // All the supabase hooks.
     const [addNft, { data: nftData }] = supabaseInsertNft()
-    function onLikesClick(event) {
+    const [delLike, { data: delLikeData }] = supabaseDeleteLike()
+    const [addLike, { data: addLikeData }] = supabaseInsertLike(delLike, nft.thing.id,)
+    const [addComment, { data: addCommentData }] = supabaseInsertComment()
+    const [delComment, { data: delCommentData }] = supabaseDeleteComment()
 
-
+    function onLikesClick(like) {
+        console.log(like)
+        // console.log(user)
         // First insert the Nft into the database.
         addNft({
             variables: {
@@ -52,7 +66,15 @@ export default function Post({ nft }) {
                 }]
             },
         });
-        console.log(nftData)
+        // console.log(nftData)
+        addLike({
+            variables: {
+            "objects": [{
+                "user_id": user.user.id,
+                "nft_id": nft.thing.id,
+                "value": like
+            }]}
+        })
     }
 
     return (
@@ -124,7 +146,8 @@ export default function Post({ nft }) {
                     className="mr-3"
                     icon={<MdOutlineThumbUp />}
                     isRound
-                    onClick={(e) => onLikesClick(e)}
+                    onClick={() => onLikesClick("true")}
+                    value="true"
                 >
                 </IconButton>
                 <Text> 1 </Text>
@@ -132,7 +155,8 @@ export default function Post({ nft }) {
                     className="mr-3 ml-3"
                     icon={<MdOutlineThumbDown />}
                     isRound
-                    onClick={(e) => onLikesClick(e)}
+                    onClick={() => onLikesClick("false")}
+                    value="false"
                 >
                 </IconButton>
                 <Text> 3 </Text>
@@ -140,7 +164,7 @@ export default function Post({ nft }) {
                     className="ml-auto h-6 mr-3"
                     icon={<GiCrownedHeart className="fill-red-500" />}
                     isRound
-                    onClick={(e) => onLikesClick(e)}
+                    // onClick={}
                 >
                 </IconButton>
                 <Text> 111 </Text>
