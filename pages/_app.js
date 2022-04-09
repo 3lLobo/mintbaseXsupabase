@@ -1,6 +1,6 @@
 import React from 'react'
 import { UserContextProvider } from '../hooks/authUser'
-import { ThemeProvider } from "next-themes";
+// import { ThemeProvider } from "next-themes";
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
 import { ApolloProvider } from '@apollo/client'
@@ -36,9 +36,9 @@ export default function MyApp({ Component, pageProps }) {
       <UserContextProvider>
         <ApolloProvider client={mintbaseClient}>
           <ChakraProvider theme={theme}>
-            <ThemeProvider attribute="class">
+            {/* <ThemeProvider attribute="class"> */}
               <Component {...pageProps} />
-            </ThemeProvider>
+            {/* </ThemeProvider> */}
           </ChakraProvider>
         </ApolloProvider>
       </UserContextProvider>
