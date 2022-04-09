@@ -16,3 +16,13 @@
 The `<ApolloProvider>` takes onw client and makes it available when calling the hooks.
 To use a second endpoint, define a seperate client and pass it as option argument to the hooks. See [docs]{https://www.apollographql.com/docs/react/api/react/hooks/#usequery}
 
+## SQL hacqs
+
+We want a like or dislike to be unique. So with this little hack, the user can only give one like per NFT:
+
+```sql
+alter table "Like"
+add constraint uq_Person unique(user_id, nft_id);
+```
+
+🤓

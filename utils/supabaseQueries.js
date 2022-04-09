@@ -1,38 +1,38 @@
 import { ApolloClient, HttpLink, InMemoryCache, useQuery, gql } from '@apollo/client'
 
 
-export const GET_NFT_DATA = gql`
-query Query($filter: NftFilter) {
-    nftCollection(filter: $filter) {
-      edges {
-        node {
-          likes
-          comments
-          commnetCollection {
-            edges {
-              node {
-                text
-                user_id
-                users {
-                  first_name
-                  last_name
-                }
-              }
+export const QueryNftAll = gql`
+query NftCollection($filter: NftFilter) {
+  nftCollection(filter: $filter) {
+    edges {
+      node {
+        commentCollection {
+          edges {
+            node {
+              id
+              created_at
+              text
+              user_id
             }
           }
-          likeCollection {
-            edges {
-              cursor
-              node {
-                value
-                users {
-                  id
-                }
-              }
+        }
+        minter_id
+        network
+        store_id
+        mintbase_thing_id
+        created_at
+        likeCollection {
+          edges {
+            node {
+              id
+              created_at
+              user_id
+              value
             }
           }
         }
       }
     }
   }
+}
 `

@@ -30,52 +30,37 @@ import { useState, useEffect } from "react";
 import useCustomToast from "../../hooks/useCustomToast";
 import TimeAgo from "timeago-react";
 import { supabaseNftData } from "../../utils/supabaseQueries";
+import { supabaseInsertNft } from "../../utils/supabaseFncs";
+import { mintbaseNetwork } from '../../utils/initApolloMintbase'
 
 
 export default function Post({ nft }) {
-
-
     const postBg = useColorModeValue("#edf2f7", "#171923");
-    const styles = {
-        // fontFamily: "poppings",
-        backgroundColor: postBg,
-        // maxHeight: 430,
-        borderRadius: 10,
-        padding: 20,
-        marginTop: 20,
-        marginBottom: 20,
-        header: {
-            height: 64,
-            display: "flex",
-            alignItems: "center",
-            position: "relative",
-            gap: 5,
-        },
-        // ! prevent too long to read contents from spanning large heights
-        // instead turn to scrollable content container
-        content: {
-            margin: "0 auto",
-            overflowY: "auto",
-            maxH: 400,
-            overflowX: "hidden",
 
-        },
-        footer: {
-            // height: 64,
-            display: "flex",
-            alignItems: "center",
-        },
-    };
+    const [addNft, { data: nftData }] = supabaseInsertNft()
+    function onLikesClick(event) {
 
-    // Supabase data
 
-    const { data, loading } = supabaseNftData(nft.thing.id)
+        // First insert the Nft into the database.
+        addNft({
+            variables: {
+                "objects": [{
+                    "mintbase_thing_id": nft.thing.id,
+                    "store_id": nft.thing.store.id,
+                    "minter_id": nft.minter,
+                    "network": mintbaseNetwork
+                }]
+            },
+        });
+        console.log(nftData)
+    }
 
-    console.log(data)
     return (
-        <Box style={styles}>
+        <Box
+            className="p-5 rounded-2xl my-6"
+            bg={postBg}
+        >
             <Heading
-            // style={styles.header}
             >
                 <Box
                     className="flex"
@@ -110,9 +95,12 @@ export default function Post({ nft }) {
                     datetime={nft.createdAt}
                 />
             </Heading>
-            <Box mb={1} style={styles.content} className="flex">
+            <Box
+                mb={1}
+                className="flex"
+            >
                 <ChakraImage
-                // onClick="The image should pop up and fill the whole screen"
+                    // onClick="The image should pop up and fill the whole screen"
                     maxH={200}
                     rounded="lg"
                     maxWidth={["100%", "400px", "225px"]}
@@ -121,17 +109,22 @@ export default function Post({ nft }) {
                     alt={"contentNftmedia" + nft.thing.id}
                     objectFit="contain"
                 />
-                <Box p={2} style={styles.content} className="overflow-hidden">
+                <Box
+                    p={2}
+                    className="overflow-hidden"
+                >
                     {nft.thing.metadata?.description}
                 </Box>
             </Box>
             <Divider />
-            <Box p={2} style={styles.footer}>
+            <Box p={2}
+                className="flex"
+            >
                 <IconButton
                     className="mr-3"
                     icon={<MdOutlineThumbUp />}
                     isRound
-                // onClick={console.log("Add to favorites")}
+                    onClick={(e) => onLikesClick(e)}
                 >
                 </IconButton>
                 <Text> 1 </Text>
@@ -139,7 +132,7 @@ export default function Post({ nft }) {
                     className="mr-3 ml-3"
                     icon={<MdOutlineThumbDown />}
                     isRound
-                // onClick={console.log("Dislike NFT")}
+                    onClick={(e) => onLikesClick(e)}
                 >
                 </IconButton>
                 <Text> 3 </Text>
@@ -147,7 +140,7 @@ export default function Post({ nft }) {
                     className="ml-auto h-6 mr-3"
                     icon={<GiCrownedHeart className="fill-red-500" />}
                     isRound
-                // onClick={console.log("Like NFT")}
+                    onClick={(e) => onLikesClick(e)}
                 >
                 </IconButton>
                 <Text> 111 </Text>

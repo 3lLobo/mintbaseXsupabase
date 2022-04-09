@@ -1,4 +1,8 @@
 import { ApolloClient, HttpLink, InMemoryCache, useMutation, gql } from '@apollo/client'
+import { InsertComment, InsertLike, InsertNft, DeleteComment, DeleteLike } from './supabaseMutations'
+import { QueryNftAll } from './supabaseQueries'
+import { mintbaseNetwork } from './initApolloMintbase'
+
 
 const supabaseClient = new ApolloClient({
     ssrMode: typeof window === 'undefined',
@@ -13,17 +17,15 @@ const supabaseClient = new ApolloClient({
     cache: new InMemoryCache(),
 })
 
-export function supabaseSetNftData() {
-    const [ addNftData, { data}] = useMutation(
-    NFT_MUTATION, {
+export function supabaseInsertNft() {
+    const [addNft, { data }] = useMutation(
+        InsertNft, {
         client: supabaseClient,
-        variables: {
-            "objects": null,
-            "insertIntoLikeCollectionObjects2": null,
-            "insertIntoNftCollectionObjects2": null
-        },
+        onCompleted: ((data) => console.log("Supabase Insterted NFT: ", data)),
         onError: ((error) => console.log("Supabase Mutation Error: ", error))
     })
+    // Call addNft with these args: mintbase_thing_id, store_id, minter_id
+    return [addNft, { data }]
 }
 
 
