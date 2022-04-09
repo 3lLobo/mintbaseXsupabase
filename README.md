@@ -14,3 +14,4 @@ This page pulls NFTs from mintbase and gives the users the option to like and co
 ## Storyboard
 
 Storyboard with Next.js [setup](https://storybook.js.org/blog/get-started-with-storybook-and-next-js/)
+
