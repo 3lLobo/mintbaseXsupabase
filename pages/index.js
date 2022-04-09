@@ -2,12 +2,13 @@ import Header from '../components/Header'
 import Head from '../components/Head'
 import Feed from '../components/Feed'
 import { Text, Box, Center, Image, Heading, HStack, Button } from '@chakra-ui/react'
+import { useUser } from '../hooks/authUser'
 
 
 
 const Index = () => {
 
-  const user = null ;
+  const user = useUser() ;
 
   return (
     <Box>
