@@ -23,7 +23,7 @@ export const AuthRedirect = () => {
 
   useEffect(() => {
     if (user) {
-      router.push('/feed')
+      router.push('/')
     }
   }, [user, router])
 }
