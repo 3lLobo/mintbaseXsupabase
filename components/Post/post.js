@@ -39,6 +39,7 @@ export default function Post({ nft }) {
     const [nftLikes, setNftLikes] = useState([])
     // const [nftDislikes, setNftDislikes] = useState([])
     const [userLike, setUserLike] = useState()
+    const [userComment, setUserComment] = useState("")
 
     // const [ownLike, setOwnLike] = useState()
     useEffect(() => {
@@ -52,8 +53,8 @@ export default function Post({ nft }) {
                 console.log("Com", supaComments)
                 const supaLikes = supabaseData.likeCollection.edges
                 console.log("Likes", supaLikes)
-                if (supaComments.length > 0) {setNftComments(() => supaComments.map((edge) => {return edge.node}))}
-                if (supaLikes.length > 0) {setNftLikes(() => supaLikes.map((edge) => {return edge.node}))}
+                if (supaComments.length > 0) { setNftComments(() => supaComments.map((edge) => { return edge.node })) }
+                if (supaLikes.length > 0) { setNftLikes(() => supaLikes.map((edge) => { return edge.node })) }
 
                 const like = supaLikes.filter((like) => like.node.user_id === user.user.id);
                 if (like.length > 0) {
@@ -69,16 +70,31 @@ export default function Post({ nft }) {
     const [addNft, { data: addNftData }] = supabaseInsertNft()
     const [delLike, { data: delLikeData }] = supabaseDeleteLike(setUserLike)
     const [addLike, { data: addLikeData }] = supabaseInsertLike(setUserLike)
-    const [addComment, { data: addCommentData }] = supabaseInsertComment()
+    const [addComment, { data: addCommentData }] = supabaseInsertComment(setNftComments)
     const [delComment, { data: delCommentData }] = supabaseDeleteComment()
     const [updLike, { }] = supabaseUpdateLike(setUserLike, userLike, addLike,)
 
-    async function onLikeClick(likeStr) {
-        // First insert the Nft into the database.
-        const like = JSON.parse(likeStr);
-        console.log('Like: ', {"value": like})
-        if (!nftData) {
+    async function onComment(event) {
+        event.preventDefault()
+        await isSupaNft()
 
+        if (userComment.length > 0) {
+            await addComment({
+                variables: {
+                    "objects": [{
+                        "text": userComment,
+                        "nft_id": nft.thing.id,
+                        "user_id": user.user.id
+                    }]
+                }
+            })
+            setUserComment("")
+        }
+    }
+
+    async function isSupaNft() {
+        if (!nftData) {
+            // First insert the Nft into the database.
             await addNft({
                 variables: {
                     "objects": [{
@@ -90,6 +106,11 @@ export default function Post({ nft }) {
                 },
             });
         }
+    }
+
+    async function onLikeClick(likeStr) {
+        const like = JSON.parse(likeStr);
+        await isSupaNft()
 
         if (userLike) {
             if (userLike.value !== like) {
@@ -106,7 +127,7 @@ export default function Post({ nft }) {
                         }
                     }
                 })
-            } else { 
+            } else {
                 console.log("Like is already set:", userLike, like)
                 await delLike({
                     variables: {
@@ -120,7 +141,7 @@ export default function Post({ nft }) {
                         }
                     }
                 })
-                return 
+                return
             }
         } else {
             console.log("Adding new like: ", nft, user)
@@ -135,7 +156,7 @@ export default function Post({ nft }) {
             })
         }
     };
-    
+
     useEffect(() => {
         setNftLikes((prev) => {
             let prevFilter = prev.filter((like) => like?.user_id !== user.user.id)
@@ -219,7 +240,8 @@ export default function Post({ nft }) {
                         favorite="0"
                         userLike={userLike}
                         onLikeClick={onLikeClick}
-                    // userLike={userLike}
+                        onComment={onComment}
+                        setUserComment={setUserComment}
                     />
                     <CommentSection
                         comments={nftComments}

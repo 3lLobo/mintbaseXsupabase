@@ -12,9 +12,16 @@ import { GiCrownedHeart } from "react-icons/gi";
 import { MdOutlineThumbDown, MdOutlineThumbUp, MdOutlineThumbUpAlt, MdOutlineThumbUpOffAlt, MdSend } from "react-icons/md"
 
 
-export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClick }) => {
+export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClick, onComment, setUserComment }) => {
 
-    console.log("MyLike:", userLike)
+    // console.log("MyLike:", userLike)
+
+    function updateComment(e) {
+        e.preventDefault();
+        const val = e.currentTarget.value;
+        setUserComment(() => {return val})
+    }
+
     return (
         <Box>
             <Box
@@ -58,8 +65,16 @@ export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClic
             <Box
                 className=" mr-1 flex"
             >
-                <Input variant='filled' placeholder='Comment' />
-                <IconButton icon={<MdSend />}>Send!</IconButton>
+                <Input 
+                variant='filled' 
+                placeholder='Comment'
+                onChange={(e) => updateComment(e)}
+                
+                />
+                <IconButton 
+                icon={<MdSend />}
+                onClick={onComment}
+                />
             </Box>
         </Box>
     )

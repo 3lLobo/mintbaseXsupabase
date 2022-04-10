@@ -63,9 +63,20 @@ const MenuLogado = ({ user }) => (
               )}
             </Menu.Item>
             <Menu.Item>
-              <button onClick={() => SignOut()} className="block px-4 py-2 text-sm text-gray-700">
-                Sign out
-              </button>
+              {({ active }) => (
+                <a
+                  href="/#"
+                  className={classNames(
+                    active ? 'bg-gray-100' : '',
+                    'block px-4 py-2 text-sm text-gray-700'
+                  )}
+                >
+                  <button onClick={() => SignOut()} >
+                    Sign out
+                  </button>
+                </a>
+              )}
+
             </Menu.Item>
           </Menu.Items>
         </Transition>

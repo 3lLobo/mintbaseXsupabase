@@ -29,8 +29,8 @@ export function supabaseInsertNft() {
 }
 
 function insertLikeHelper(data, setUserLike) {
-    console.log("data", data)
     setUserLike(data.insertIntoLikeCollection.records[0])
+    console.log("Supabase Insterted Like: ", data)
 }
 
 export function supabaseInsertLike(setUserLike) {
@@ -56,11 +56,19 @@ export function supabaseInsertLike(setUserLike) {
     return [addLike, { data }]
 }
 
-export function supabaseInsertComment() {
+function insertCommentHelper(data, setNftComments) {
+    console.log("data", data)
+    setNftComments((prev) => {
+        return [...prev, data.insertIntoCommentCollection.records[0]]
+    })
+    console.log("Supabase Insterted Comment: ", data)
+}
+
+export function supabaseInsertComment(setNftComments) {
     const [addComment, { data }] = useMutation(
         InsertComment, {
         client: supabaseClient,
-        onCompleted: ((data) => console.log("Supabase Insterted Comment: ", data)),
+        onCompleted: ((data) => insertCommentHelper(data, setNftComments)),
         onError: ((error) => console.log("Supabase Comment Insterted Error: ", error))
     })
     //     Call addNft with these args: {
