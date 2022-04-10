@@ -68,6 +68,7 @@ export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClic
                 className=" mr-1 flex"
             >
                 <Input 
+                w={"100%"}
                 variant='filled' 
                 placeholder='Comment'
                 focusBorderColor = "gray.400"

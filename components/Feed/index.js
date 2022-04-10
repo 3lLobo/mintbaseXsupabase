@@ -53,7 +53,7 @@ const Feed = () => {
                     "createdAt": "desc"
                 }
             ],
-            "limit": 400,
+            "limit": 40,
         },
         pollInterval: 900
     });

@@ -20,10 +20,11 @@ const brand = {
     gray: {
       100: "#e5e5e5",
       200: "#f6f6f6",
+      700: "#404040",
       800: "#131414",
       400: "#a3a3a3"
     },
-    white: "#d4d4d4"
+    white: "#e5e5e5"
   }
 }
 const theme = extendTheme(brand);

@@ -10,7 +10,7 @@ import { graphqlSync } from 'graphql'
 const Index = () => {
 
   const user = useUser() ;
-  const bg = useColorModeValue("gray.200", "#030406");
+  const bg = useColorModeValue("white", "gray.800");
 
   return (
     <Box>
