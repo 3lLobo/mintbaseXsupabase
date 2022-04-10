@@ -1,4 +1,4 @@
-import { Box, useColorModeValue, Grid, Button, } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useQuery, gql } from '@apollo/client';
 import { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ export const SpinnerContainer = () => {
     return (
         <Button
             isLoading
-            colorScheme='blue'
+            colorScheme='gray'
         >
         </Button>
     )
@@ -30,8 +30,6 @@ const LazyPosts = dynamic(() => import("../Post/post"), {
 });
 
 const Feed = () => {
-    const picBg = useColorModeValue("gray.200", "gray.700");
-    const postBg = useColorModeValue("gray.100", "gray.900");
 
     // Filter the duplicate tokens
     function filterDups(arr) {
@@ -55,7 +53,7 @@ const Feed = () => {
                     "createdAt": "desc"
                 }
             ],
-            "limit": 36,
+            "limit": 400,
         },
         pollInterval: 900
     });
@@ -67,29 +65,26 @@ const Feed = () => {
 
     return (
         <Box
-            className="p-4 relative md:px-10 "
+            className="p-4 relative sm:px-10 "
         >
-            <Grid
-                // templateColumns={["repeat(100%)", "20vw calc(100% - 25vw)"]}
+            <Box
                 gap="20px"
-            >
-
-                <Box maxW={640}
-                    className="place-content-center place-self-center"
-                >
+                className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 "
+            > 
                     {loading
                         ? <SpinnerContainer />
                         : unique?.map((nft) => {
                             return (
-                                <LazyPosts
-                                    key={nft.thing.id}
-                                    nft={nft}
-                                />
+                                <div maxW={500} colSpan={1} className="flex flex-col hover:drop-shadow-lg">
+                                    <LazyPosts
+                                        key={nft.thing.id}
+                                        nft={nft}
+                                    />
+                                </div>
                             )
                         })
                     }
-                </Box>
-            </Grid>
+            </Box>
         </Box>
     );
 };

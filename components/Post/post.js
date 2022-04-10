@@ -7,6 +7,8 @@ import {
     Avatar,
     Divider,
     Heading,
+    Tag,
+    VStack,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import useCustomToast from "../../hooks/useCustomToast";
@@ -28,7 +30,7 @@ import { CommentSection } from "./Footer/commentSection";
 
 
 export default function Post({ nft }) {
-    const postBg = useColorModeValue("#edf2f7", "#171923");
+    const postBg = useColorModeValue("#fafafa", "lightblack");
     const user = useUser()
     const [nftData, setNftData] = useState()
 
@@ -182,7 +184,7 @@ export default function Post({ nft }) {
                             className="flex"
                         >
                             <Avatar
-                                className=" bg-slate-300 hover:cursor-pointer hover:border-slate-300 hover:border-2"
+                                className=" bg-slate-300 hover:cursor-pointer hover:border-gray-400 hover:border-2"
                                 bg={postBg}
                                 name={nft.minter
                                 }
@@ -190,30 +192,21 @@ export default function Post({ nft }) {
                                 size="sm"
                             // onClick={console.log("Show all NFTs from this store")}
                             />
-                            <Button
+                            <Text
+                                fontSize="sm"
                                 className="mr-auto ml-3"
                                 // onClick={console.log("Show all NFTs from this minter!")}
                                 my={2}
                             >{nft.minter}
-                            </Button>
-                            <Button
-                                className="ml-3 mr-1"
-                            // onClick={console.log("Filter for this media type!")}
-                            >
-                                {nft.thing.metadata?.media_type}
-                            </Button>
-                        </Box >
-                        <Text
-                            className="text-base tracking-wider uppercase font-mono font-extrabold"
-                            my={2}
-                        >{nft.thing.metadata?.title}</Text>
-                        <TimeAgo
-                            className={`text-[11px] order-last pr-1 opacity-60`}
+                            </Text>
+                            <TimeAgo
+                            className={`text-[11px] font-light order-last p-3 opacity-50`}
                             datetime={nft.createdAt}
-                        />
+                            />                         
+                        </Box >
                     </Heading >
                     <Box
-                        mb={1}
+                        m={3}
                         className="flex"
                     >
                         <ChakraImage
@@ -224,14 +217,23 @@ export default function Post({ nft }) {
                             margin="0 auto"
                             src={nft.thing.metadata?.media}
                             alt={"contentNftmedia" + nft.thing.id}
-                            objectFit="contain"
+                            objectFit="cover"
                         />
-                        <Box
-                            p={2}
-                            className="overflow-hidden"
-                        >
-                            {nft.thing.metadata?.description}
-                        </Box>
+                        <VStack>
+                            <Text
+                                className="font-extrabold"
+                                my={2}
+                            >{nft.thing.metadata?.title}</Text>
+                            <Box p={2} className="overflow-hidden"><Text align={"center"}>{nft.thing.metadata?.description}</Text></Box>
+                            <Tag
+                                color="gray.400"
+                                className="ml-3 mr-1"
+                                size={"sm"}
+                            // onClick={console.log("Filter for this media type!")}
+                            >
+                                {nft.thing.metadata?.media_type}
+                            </Tag>
+                        </VStack> 
                     </Box>
                     <Divider />
                     <InteractionBar

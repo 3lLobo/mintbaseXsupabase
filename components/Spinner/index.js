@@ -5,7 +5,7 @@ export const SpinnerContainer = () => {
     return (
         <Button
             isLoading
-            colorScheme='blue'
+            colorScheme='gray'
         >
         </Button>
     )

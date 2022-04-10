@@ -18,9 +18,12 @@ const brand = {
   colors: {
     lightblack: "#1E2021",
     gray: {
+      100: "#e5e5e5",
+      200: "#f6f6f6",
       800: "#131414",
+      400: "#a3a3a3"
     },
-    white: "#e5e5e5"
+    white: "#d4d4d4"
   }
 }
 const theme = extendTheme(brand);

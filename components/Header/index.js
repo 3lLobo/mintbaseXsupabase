@@ -12,7 +12,6 @@ import { Box, useColorModeValue, DarkMode } from '@chakra-ui/react'
 
 export default function Header() {
 
-    const bg = useColorModeValue("#1a365d", "#2a69ac");
     const { user } = useUser()
     return (
             <Disclosure
