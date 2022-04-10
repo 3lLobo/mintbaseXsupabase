@@ -1,4 +1,4 @@
-import { ApolloClient, HttpLink, InMemoryCache, useMutation, gql } from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache, useMutation, useQuery, gql } from '@apollo/client'
 import { InsertComment, InsertLike, InsertNft, DeleteComment, DeleteLike } from './supabaseMutations'
 import { QueryNftAll } from './supabaseQueries'
 import { mintbaseNetwork } from './initApolloMintbase'
@@ -28,20 +28,25 @@ export function supabaseInsertNft() {
     return [addNft, { data }]
 }
 
-export function supabaseInsertLike(delLike, nftThingId,) {
+function insertLikeHelper(data, setUserLike) {
+    console.log("data", data)
+    setUserLike(data.insertIntoLikeCollection.records[0])
+}
+
+export function supabaseInsertLike(setUserLike) {
     const [addLike, { data }] = useMutation(
         InsertLike, {
         client: supabaseClient,
-        onCompleted: ((data) => console.log("Supabase Insterted Like: ", data)),
-        onError: ((error) => delLike({
-            variables: {
-                "filter": {
-                    "nft_id": {
-                        "eq": nftThingId
-                    },
-                }
-            }
-        }))
+        onCompleted: ((data) => insertLikeHelper(data, setUserLike)),
+        onError: ((error) => console.log("Supabase Insert Like Error: ", error))
+        //     variables: {
+        //         "filter": {
+        //             "nft_id": {
+        //                 "eq": nftThingId
+        //             },
+        //         }
+        //     }
+        // }))
     })
     //     Call addNft with these args: {
     //   "objects": [{"user_id": "e7c9b32a-5631-4ac8-9894-ad77cdec4407", 
@@ -87,11 +92,11 @@ export function supabaseDeleteComment() {
     return [delComment, { data }]
 }
 
-export function supabaseDeleteLike() {
+export function supabaseDeleteLike(setUserLike) {
     const [delLike, { data }] = useMutation(
         DeleteLike, {
         client: supabaseClient,
-        onCompleted: ((data) => console.log("Supabase Deleted Like: ", data)),
+        onCompleted: (() => setUserLike(null)),
         onError: ((error) => console.log("Supabase Like Deleted Error: ", error))
     })
     //     Call addNft with these args: {
@@ -108,8 +113,43 @@ export function supabaseDeleteLike() {
     return [delLike, { data }]
 }
 
+function updateHelper(setUserLike, data, addLike, userLike) {
+    console.log("updateHelper:", userLike)
+    setTimeout(() => addLike({
+        variables: {
+            "objects": [{
+                "user_id": userLike.user_id,
+                "nft_id": userLike.nft_id,
+                "value": !userLike.value,
+            }]}}), 1000);
+
+    console.log("Supabase Updated Like: ", data)
+}
+
+//  Set the like to the oposite value of the current user Like.
+export function supabaseUpdateLike(setUserLike, userLike, addLike,) {
+    const [updLike, { data }] = useMutation(
+        DeleteLike, {
+            client: supabaseClient,
+            onCompleted: ((data) => updateHelper(setUserLike, data, addLike, userLike)),
+                onError: ((error) => console.log("Supabase Like Update Error: ", error))
+    })
+//     Call addNft with these args: {
+// {
+//     "filter": {
+//     "nft_id": {
+//         "eq": "SnhecOqJGXbDz5vuvr6p-TES6AWMNtfsokDSzmBWetM:voiceoftheoceans.mintbase1.near"
+//     },
+//     "user_id": {
+//         "eq": "e7c9b32a-5631-4ac8-9894-ad77cdec4407"
+//     },
+//     }
+// }
+return [updLike, { data }]
+}
+
 export function supabaseNftData(nftId) {
-    const { loading, error, data } = useQuery(GET_NFT_DATA, {
+    const { loading, error, data } = useQuery(QueryNftAll, {
         client: supabaseClient,
         variables: {
             "filter": {

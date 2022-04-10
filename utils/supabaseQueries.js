@@ -26,6 +26,7 @@ query NftCollection($filter: NftFilter) {
             node {
               id
               created_at
+              nft_id
               user_id
               value
             }
