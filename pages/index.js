@@ -1,14 +1,16 @@
 import Header from '../components/Header'
 import Head from '../components/Head'
 import Feed from '../components/Feed'
-import { Text, Box, Center, Image, Heading, HStack, Button } from '@chakra-ui/react'
+import { Text, Box, Center, Image, Heading, HStack, Button , useColorModeValue} from '@chakra-ui/react'
 import { useUser } from '../hooks/authUser'
+import { graphqlSync } from 'graphql'
 
 
 
 const Index = () => {
 
   const user = useUser() ;
+  const bg = useColorModeValue("gray.200", "#030406");
 
   return (
     <Box>
@@ -18,7 +20,7 @@ const Index = () => {
       <main>
         {user ? 
           <Feed /> : (
-          <HStack bg={"#030406"}>
+          <HStack bg={bg}>
             <Box>
               <Image boxSize='95%' height={"100vh"} objectFit='cover' src='/images/hero-image.jpg' />
             </Box>
@@ -26,7 +28,7 @@ const Index = () => {
               <Heading textAlign={"center"} p={2} as='h1' size={"4xl"} > All your NFTs <br />in one place </Heading>
               <Text align={"center"} m={4}>Dopest NFTs from Mintbase. Collect, Like & Share now !</Text>
               <Center>
-                <Button p={5} size={"lg"} color={"blue.200"} > Login </Button>
+                <Button p={5} size={"lg"} color={"blue.100"} bg={'gray.700'} > Login </Button>
               </Center>
               
             </Box>
