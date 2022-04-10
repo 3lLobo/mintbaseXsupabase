@@ -9,13 +9,13 @@ import { useUser } from "../../../hooks/authUser";
 
 const CommentOther = ({ comment }) => {
 
-    const bg = useColorModeValue("gray.300", "gray.700");
+    const bg = useColorModeValue("#e5e5e5", "#404040");
     return (
         <Box
             bg={bg}
             className="rounded-2xl pt-1 px-3 w-fit text-left"
         >
-            <Text
+            <Text fontSize={"xs"}
             > {comment.text || ""}
             </Text>
             <CommentTimestamp
@@ -48,7 +48,7 @@ const CommentTimestamp = (timestamp) => {
 
     return (
         <TimeAgo
-            className="text-xs font-bold font-mono px-2 text-slate-400"
+            className="text-xs px-2 text-neutral-400"
             dateTime={timestamp}
         />
     )

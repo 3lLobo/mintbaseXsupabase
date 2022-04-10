@@ -12,27 +12,16 @@ import { Box, useColorModeValue, DarkMode } from '@chakra-ui/react'
 
 export default function Header() {
 
-    const bg = useColorModeValue("#1a365d", "#2a69ac");
     const { user } = useUser()
     return (
             <Disclosure
                 as="nav"
-                bg={bg}
-                className="bg-neutral-800 shadow-2xl rounded-b-2xl opacity-80 sticky top-0 "
+                className="bg-neutral-900 shadow-2xl z-10 opacity-100 sticky top-0 "
             >
                 {({ open }) => (
                     <>
                         <Box 
-                        bgGradient={useColorModeValue([
-                            'linear(to-tr, teal.300, yellow.100)',
-                            'linear(to-t, blue.100, teal.400)',
-                            // 'linear(to-t, orange.100, purple.600)',
-                          ], [
-                            'linear(to-tr, teal.300, yellow.100)',
-                            'linear(to-b, blue.100, teal.400)',
-                            // 'linear(to-b, orange.100, purple.600)',
-                          ])}
-                        className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+                        className=" mx-auto px-2 sm:px-6 lg:px-8">
                             <Box className="relative flex items-center justify-between h-16">
                                 <Box className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                     {/* Mobile menu button*/}

@@ -11,23 +11,23 @@ import '../styles/globals.css'
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const brand = {
-  colors : {
-    900: '#1a365d',
-    800: '#153e75',
-    700: '#2a69ac',
-  },
   fonts: {
     heading: "Poppins",
-    body: "Work Sans",
+    body: "Poppins",
   },
   colors: {
     lightblack: "#1E2021",
     gray: {
+      100: "#e5e5e5",
+      200: "#f6f6f6",
+      700: "#404040",
       800: "#131414",
-    }
+      400: "#a3a3a3"
+    },
+    white: "#e5e5e5"
   }
 }
-const theme = extendTheme({ brand });
+const theme = extendTheme(brand);
 const mintbaseClient = createApolloClient();
 
 export default function MyApp({ Component, pageProps }) {
