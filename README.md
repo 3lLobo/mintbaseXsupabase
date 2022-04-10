@@ -2,6 +2,10 @@
 
 This page pulls NFTs from mintbase and gives the users the option to like and comment and query the NFTs.
 
+### Live demo
+
+[nftea-base.netlify.app](nftea-base.netlify.app)
+
 ## RoadMap
 
 1. User auth with github/google.

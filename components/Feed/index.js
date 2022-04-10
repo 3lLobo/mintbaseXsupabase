@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { GET_LATEST_NFTS, GET_ALL_STORES } from '../../utils/mintbaseQueries'
 
 
-const SpinnerContainer = () => {
+export const SpinnerContainer = () => {
     return (
         <Button
             isLoading
@@ -55,7 +55,7 @@ const Feed = () => {
                     "createdAt": "desc"
                 }
             ],
-            "limit": 69,
+            "limit": 36,
         },
         pollInterval: 900
     });

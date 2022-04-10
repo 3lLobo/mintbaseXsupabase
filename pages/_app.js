@@ -4,7 +4,7 @@ import { UserContextProvider } from '../hooks/authUser'
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
 import { ApolloProvider } from '@apollo/client'
-import { createApolloClient } from "../utils/initApollo"
+import { createApolloClient } from "../utils/initApolloMintbase"
 
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
