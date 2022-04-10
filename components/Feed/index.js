@@ -67,7 +67,7 @@ const Feed = () => {
 
     return (
         <Box
-            className="p-4 z-10 relative md:px-10 "
+            className="p-4 relative md:px-10 "
         >
             <Grid
                 // templateColumns={["repeat(100%)", "20vw calc(100% - 25vw)"]}

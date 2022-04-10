@@ -17,7 +17,7 @@ export default function Header() {
     return (
             <Disclosure
                 as="nav"
-                className="bg-neutral-900 shadow-2xl opacity-100 sticky top-0 "
+                className="bg-neutral-900 shadow-2xl z-10 opacity-100 sticky top-0 "
             >
                 {({ open }) => (
                     <>
