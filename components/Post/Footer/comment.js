@@ -31,7 +31,7 @@ const CommentSelf = ({ comment }) => {
     return (
         <Box
         bg={bg}
-        className="rounded-2xl pt-1 px-3 w-fit ml-auto text-right"
+        className="rounded-2xl py-1 px-3 w-fit ml-auto text-right"
         >
             <Text
             className=""

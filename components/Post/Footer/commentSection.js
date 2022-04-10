@@ -15,10 +15,12 @@ import { Comment } from "./comment";
 
 export const CommentSection = ({ comments }) => {
 
+    comments.reverse();
+    
     return (
         <Box>
-            <Stack>
-                {comments.reverse().map((cmnt) => {
+            {/* <Stack> */}
+                {comments.map((cmnt) => {
                     return (
                         <Comment comment={cmnt} />
                     )
@@ -28,7 +30,7 @@ export const CommentSection = ({ comments }) => {
                 <Text>Perhaps make an component for Comments.</Text>
                 <Text>The comment Author and date also need to fit here.</Text>
                 <Text>First Comment</Text> */}
-            </Stack>
+            {/* </Stack> */}
         </Box>
     )
 }
