@@ -3,11 +3,14 @@ import Head from '../components/Head'
 import { Text, Box, Center } from '@chakra-ui/react'
 import { useUser } from '../hooks/authUser'
 import Feed from '../components/Feed'
+import { createApolloClient } from '../utils/initApolloMintbase'
 
 
 const Index = () => {
 
   const {user} = useUser();
+
+  const [mintbaseNetwork, setMintbaseNetwork] = useState('testnet')
 
   return (
     <Box>
