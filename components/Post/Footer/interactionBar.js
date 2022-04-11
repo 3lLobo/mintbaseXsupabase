@@ -30,35 +30,37 @@ export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClic
             >
                 <IconButton
                     className="mr-3"
-                    // bg="bg-red-300"
+                    variant={"ghost"}
                     colorScheme={(userLike?.value === true) && "green" || "gray"}
                     icon={<MdOutlineThumbUp />}
                     isRound
                     onClick={() => onLikeClick("true")}
                 >
                 </IconButton>
-                <Text>
+                <Text p={2}>
                     {likes || 0}
                 </Text>
                 <IconButton
                     className="mr-3 ml-3"
+                    variant={"ghost"}
                     colorScheme={(userLike?.value === false) && "red" || "gray"}
                     icon={<MdOutlineThumbDown />}
                     isRound
                     onClick={() => onLikeClick("false")}
                 >
                 </IconButton>
-                <Text>
+                <Text p={2}>
                     {dislikes || 0}
                 </Text>
                 <IconButton
+                    variant={"ghost"}
                     className="ml-auto h-6 mr-3"
                     icon={<GiCrownedHeart className="fill-red-500" />}
                     isRound
                 // onClick={}
                 >
                 </IconButton>
-                <Text>
+                <Text p={2}>
                     {favorite || 111}
                 </Text>
             </Box>
@@ -66,12 +68,16 @@ export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClic
                 className=" mr-1 flex"
             >
                 <Input 
+                w={"100%"}
                 variant='filled' 
                 placeholder='Comment'
+                focusBorderColor = "gray.400"
                 onChange={(e) => updateComment(e)}
-                
                 />
                 <IconButton 
+                ml={3}
+                isRound
+                variant={"ghost"}
                 icon={<MdSend />}
                 onClick={onComment}
                 />
