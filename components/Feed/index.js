@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useQuery, gql } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { GET_LATEST_NFTS, GET_ALL_STORES } from '../../utils/mintbaseQueries'
+import { createApolloClient } from "../../utils/initApolloMintbase";
 
 
 export const SpinnerContainer = () => {
@@ -29,7 +30,7 @@ const LazyPosts = dynamic(() => import("../Post/post"), {
     ),
 });
 
-const Feed = () => {
+const Feed = ({mintbaseNetwork}) => {
 
     // Filter the duplicate tokens
     function filterDups(arr) {
@@ -45,15 +46,17 @@ const Feed = () => {
         return uniqueArr
     }
 
+    
     const [unique, setUnique] = useState()
     const { loading, error, data } = useQuery(GET_LATEST_NFTS, {
+        client: createApolloClient(mintbaseNetwork),
         variables: {
             "orderBy": [
                 {
                     "createdAt": "desc"
                 }
             ],
-            "limit": 40,
+            "limit": 55,
         },
         pollInterval: 900
     });

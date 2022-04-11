@@ -1,7 +1,8 @@
 import { IconButton, useColorMode, DarkMode } from "@chakra-ui/react";
-import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
+import { IoSunnyOutline, IoMoonOutline, } from "react-icons/io5";
+import { BsToggleOn, BsToggleOff } from "react-icons/bs"
 
-function ToggleMode() {
+export function ToggleMode() {
     const { colorMode, toggleColorMode } = useColorMode();
 
     return (
@@ -24,8 +25,7 @@ function ToggleMode() {
 }
 
 
-function ToggleNetwork() {
-    const { colorMode, toggleColorMode } = useColorMode();
+export function ToggleNetwork({setNetwork, network}) {
 
     return (
         <DarkMode>
@@ -33,20 +33,18 @@ function ToggleNetwork() {
             <IconButton
                 className="ml-1"
                 // bg="blueviolet"
-                onClick={toggleColorMode}
-                aria-label="Toggle"
+                onClick={setNetwork((prev) => {
+                    prev === "testnet" ? "mainnet" : "testnet"
+                })}
+                aria-label="ToggleN"
                 _hover={{ bg: "none" }}
                 _active={{ bg: "none" }}
                 rounded="full"
                 variant={"outline"}
             >
-                {colorMode === "light" ? <IoSunnyOutline /> : <IoMoonOutline />}
+                {network === "testnet" ? <BsToggleOff /> : <BsToggleOn />}
             </IconButton>
         </DarkMode>
     );
 }
-
-export default ToggleMode;
-
-
 

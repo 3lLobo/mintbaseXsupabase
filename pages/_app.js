@@ -4,7 +4,6 @@ import { UserContextProvider } from '../hooks/authUser'
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
 import { ApolloProvider } from '@apollo/client'
-import { createApolloClient } from "../utils/initApolloMintbase"
 
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
@@ -28,19 +27,18 @@ const brand = {
   }
 }
 const theme = extendTheme(brand);
-const mintbaseClient = createApolloClient();
 
 export default function MyApp({ Component, pageProps }) {
   return (
     <main className={'dark'}>
       <UserContextProvider>
-        <ApolloProvider client={mintbaseClient}>
+        {/* <ApolloProvider > */}
           <ChakraProvider theme={theme}>
             {/* <ThemeProvider attribute="class"> */}
               <Component {...pageProps} />
             {/* </ThemeProvider> */}
           </ChakraProvider>
-        </ApolloProvider>
+        {/* </ApolloProvider> */}
       </UserContextProvider>
     </main>
   )

@@ -5,12 +5,14 @@ import { createApolloClient } from '../utils/initApolloMintbase'
 import { Text, Box, Center, Image, Heading, HStack, Button , useColorModeValue, Show, Hide} from '@chakra-ui/react'
 import { useUser } from '../hooks/authUser'
 import { graphqlSync } from 'graphql'
+import { useState } from 'react'
 
 
 
 const Index = () => {
 
-  const user = useUser() ;
+  // const user = useUser() ;
+  const user = {"user_metadata": {"name": "John", "full_name": "John Doe" }};
   const bg = useColorModeValue("white", "#030406");
 
   const [mintbaseNetwork, setMintbaseNetwork] = useState('testnet')
@@ -18,10 +20,10 @@ const Index = () => {
   return (
     <Box>
       <Head />
-      <Header />
+      <Header mintbaseNetwork={mintbaseNetwork} setMintbaseNetwork={setMintbaseNetwork}/>
       <main>
         {user ? 
-          <Feed /> : (
+          <Feed mintbaseNetwork={mintbaseNetwork} setMintbaseNetwork={setMintbaseNetwork}/> : (
           <HStack bg={bg}>
           <Hide below='md'>
             <Box>
