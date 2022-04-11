@@ -49,7 +49,7 @@ const CommentTimestamp = (timestamp) => {
     return (
         <TimeAgo
             className="text-xs px-2 text-neutral-400"
-            dateTime={timestamp}
+            date={timestamp}
         />
     )
 }
