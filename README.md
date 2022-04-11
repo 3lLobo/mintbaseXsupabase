@@ -27,7 +27,7 @@ That being said, I hope you mint some dope NFTs of those trees so we can judge t
 
 ### Live demo
 
-[nftea-base.netlify.app](nftea-base.netlify.app)
+[nftea-base.netlify.app](https://nftea-base.netlify.app/)
 
 ## RoadMap
 
