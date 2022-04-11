@@ -10,10 +10,11 @@ import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
 
 // 2. Extend the theme to include custom colors, fonts, etc
-const brand = {
+const brand = extendTheme({
   fonts: {
-    heading: "Poppins",
-    body: "Poppins",
+    // font-family: 'Manjari', sans-serif;
+    heading: "Manjari",
+    body: "Manjari",
   },
   colors: {
     lightblack: "#1E2021",
@@ -25,9 +26,9 @@ const brand = {
       400: "#a3a3a3"
     },
     white: "#e5e5e5"
-  }
-}
-const theme = extendTheme(brand);
+  }}
+)
+// const theme = (brand);
 const mintbaseClient = createApolloClient();
 
 export default function MyApp({ Component, pageProps }) {
@@ -35,7 +36,7 @@ export default function MyApp({ Component, pageProps }) {
     <main className={'dark'}>
       <UserContextProvider>
         <ApolloProvider client={mintbaseClient}>
-          <ChakraProvider theme={theme}>
+          <ChakraProvider theme={brand}>
             {/* <ThemeProvider attribute="class"> */}
               <Component {...pageProps} />
             {/* </ThemeProvider> */}
