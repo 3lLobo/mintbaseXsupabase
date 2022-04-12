@@ -33,6 +33,7 @@ const CommentSelf = ({ comment }) => {
         bg={bg}
         className="rounded-2xl py-1 px-3 w-fit ml-auto text-right"
         >
+            <CommnetAuthor author={comment.user_id}></CommnetAuthor>
             <Text
             className=""
             > {comment.text || ""}
@@ -49,8 +50,19 @@ const CommentTimestamp = (timestamp) => {
     return (
         <TimeAgo
             className="text-xs px-2 text-neutral-400"
-            dateTime={timestamp}
+            datetime={timestamp.timestamp}
         />
+    )
+}
+
+const CommnetAuthor = ({author}) => {
+
+    return (
+        <Box>
+            <Text>
+                {author || "Anonymous"}
+            </Text>
+        </Box>
     )
 }
 

@@ -8,7 +8,8 @@ import {
     VStack,
     Tag,
     Divider,
-    Text
+    Text,
+    Link
 } from "@chakra-ui/react";
 import {
     Modal,
@@ -20,7 +21,7 @@ import {
     ModalCloseButton,
     useDisclosure,
     Lorem
-  } from '@chakra-ui/react'
+} from '@chakra-ui/react'
 import { useState, useEffect } from "react";
 import useCustomToast from "../../hooks/useCustomToast";
 import TimeAgo from "timeago-react";
@@ -40,11 +41,11 @@ import { InteractionBar } from "./Footer/interactionBar";
 import { CommentSection } from "./Footer/commentSection";
 
 
-const Post = ({ nft }) => {
+const Post = ({ nft, mintbaseNetwork }) => {
     const postBg = useColorModeValue("#fafafa", "lightblack");
     const user = useUser()
     const [nftData, setNftData] = useState()
-    const { isOpen, onOpen, onClose } = useDisclosure() ;
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const { data, loading: nftDataLoading, error } = supabaseNftData(nft.thing.id)
 
@@ -183,27 +184,34 @@ const Post = ({ nft }) => {
         return
     }
 
+    // format the mintbase StoreUrl
+    const storeUrl = () => {
+        let url = "https://" + mintbaseNetwork + ".mintbase.io/store/" + nft.thing.store.id;
+        return url
+    }
+
     return (
         <>
-        <Box
-            className="p-5 rounded-2xl my-6"
-            bg={postBg}
-        >
-            {nftDataLoading
-                ? <SpinnerContainer />
-                : <Box>
+            <Box
+                className="p-5 rounded-2xl my-6"
+                bg={postBg}
+            >
+                {nftDataLoading
+                    ? <SpinnerContainer />
+                    : <Box>
                         <Box
                             className="flex"
                         >
-                            <Avatar
-                                className=" bg-slate-300 hover:cursor-pointer hover:border-gray-400 hover:border-2"
-                                bg={postBg}
-                                name={nft.minter
-                                }
-                                src={nft.thing.store.iconBase64}
-                                size="sm"
-                            // onClick={console.log("Show all NFTs from this store")}
-                            />
+                            <Link href={storeUrl()}>
+                                <Avatar
+                                    className=" bg-slate-300 hover:cursor-pointer hover:border-gray-400 hover:border-2"
+                                    bg={postBg}
+                                    name={nft.minter}
+                                    src={nft.thing.store.iconBase64}
+                                    size="sm"
+                                // onClick={console.log("Show all NFTs from this store")}
+                                />
+                            </Link>
                             <Text
                                 fontSize="sm"
                                 className="mr-auto ml-3"
@@ -212,56 +220,56 @@ const Post = ({ nft }) => {
                             >{nft.minter}
                             </Text>
                             <TimeAgo
-                            className={`text-[11px] font-light order-last p-3 opacity-50`}
-                            datetime={nft.createdAt}
-                            />                         
+                                className={`text-[11px] font-light order-last p-3 opacity-50`}
+                                datetime={nft.createdAt}
+                            />
                         </Box >
-                    <Box m={3} className="flex">
-                        <ChakraImage
-                            onClick={onOpen}
-                            maxH={200}
-                            rounded="lg"
-                            maxWidth={["100%", "400px", "225px"]}
-                            margin="0 auto"
-                            src={nft.thing.metadata?.media}
-                            alt={"contentNftmedia" + nft.thing.id}
-                            objectFit="cover"
-                            className="hover:cursor-pointer"
+                        <Box m={3} className="flex">
+                            <ChakraImage
+                                onClick={onOpen}
+                                maxH={200}
+                                rounded="lg"
+                                maxWidth={["100%", "400px", "225px"]}
+                                margin="0 auto"
+                                src={nft.thing.metadata?.media}
+                                alt={"contentNftmedia" + nft.thing.id}
+                                objectFit="cover"
+                                className="hover:cursor-pointer"
+                            />
+                            <VStack className="m-3">
+                                <Text
+                                    align={"center"}
+                                    className="font-extrabold"
+                                    my={2}
+                                >{nft.thing.metadata?.title}</Text>
+                                <Box p={2} className="overflow-hidden"><Text align={"center"}>{nft.thing.metadata?.description}</Text></Box>
+                                <Tag
+                                    color="gray.400"
+                                    className="ml-3 mr-1"
+                                    size={"sm"}
+                                // onClick={console.log("Filter for this media type!")}
+                                >
+                                    {nft.thing.metadata?.media_type}
+                                </Tag>
+                            </VStack>
+                        </Box>
+                        <Divider />
+                        <InteractionBar
+                            likes={nftLikes.filter((like) => like?.value === true).length || '0'}
+                            dislikes={nftLikes.filter((like) => like?.value === false).length || '0'}
+                            favorite="0"
+                            userLike={userLike}
+                            onLikeClick={onLikeClick}
+                            onComment={onComment}
+                            setUserComment={setUserComment}
                         />
-                        <VStack className="m-3">
-                            <Text
-                                align={"center"}
-                                className="font-extrabold"
-                                my={2}
-                            >{nft.thing.metadata?.title}</Text>
-                            <Box p={2} className="overflow-hidden"><Text align={"center"}>{nft.thing.metadata?.description}</Text></Box>
-                            <Tag
-                                color="gray.400"
-                                className="ml-3 mr-1"
-                                size={"sm"}
-                            // onClick={console.log("Filter for this media type!")}
-                            >
-                                {nft.thing.metadata?.media_type}
-                            </Tag>
-                        </VStack> 
+                        <CommentSection
+                            comments={nftComments}
+                        />
                     </Box>
-                    <Divider />
-                    <InteractionBar
-                        likes={nftLikes.filter((like) => like?.value === true).length || '0'}
-                        dislikes={nftLikes.filter((like) => like?.value === false).length || '0'}
-                        favorite="0"
-                        userLike={userLike}
-                        onLikeClick={onLikeClick}
-                        onComment={onComment}
-                        setUserComment={setUserComment}
-                    />
-                    <CommentSection
-                        comments={nftComments}
-                    />
-                </Box>
-            }
-        </Box >
-        <EnlargedPost nft={nft} nftLikes={nftLikes} userLike={userLike} postBg={postBg} nftComments={nftComments} onLikeClick={onLikeClick} onComment={onComment} setUserComment={setUserComment} state={[isOpen, onClose]} />
+                }
+            </Box >
+            <EnlargedPost nft={nft} nftLikes={nftLikes} userLike={userLike} postBg={postBg} nftComments={nftComments} onLikeClick={onLikeClick} onComment={onComment} setUserComment={setUserComment} state={[isOpen, onClose]} />
         </>
     );
 };
@@ -269,40 +277,40 @@ const Post = ({ nft }) => {
 
 //Modal which opens on clicking over a post 
 
-const EnlargedPost = ({ nft , postBg, nftLikes, nftComments, onLikeClick, onComment, setUserComment, userLike, state }) => {
+const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComment, setUserComment, userLike, state }) => {
     const [isOpen, onClose] = state;
-    return (   
+    return (
         <Modal isOpen={isOpen} size={"5xl"} colorScheme={postBg} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
-                <Box
-                    className="flex"
-                >
-                    <Avatar
-                        className=" bg-slate-300 hover:cursor-pointer hover:border-gray-400 hover:border-2"
-                        bg={postBg}
-                        name={nft.minter
-                        }
-                        src={nft.thing.store.iconBase64}
-                        size="sm"
-                    // onClick={console.log("Show all NFTs from this store")}
-                    />
-                    <Text
-                        fontSize="sm"
-                        className="mr-auto ml-3"
-                        // onClick={console.log("Show all NFTs from this minter!")}
-                        my={2}
-                    >{nft.minter}
-                    </Text>
-                    <TimeAgo
-                    className={`text-[11px] font-light order-last p-3 opacity-50`}
-                    datetime={nft.createdAt}
-                    />                         
-                </Box >    
-            </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>
+                    <Box
+                        className="flex"
+                    >
+                        <Avatar
+                            className=" bg-slate-300 hover:cursor-pointer hover:border-gray-400 hover:border-2"
+                            bg={postBg}
+                            name={nft.minter
+                            }
+                            src={nft.thing.store.iconBase64}
+                            size="sm"
+                        // onClick={console.log("Show all NFTs from this store")}
+                        />
+                        <Text
+                            fontSize="sm"
+                            className="mr-auto ml-3"
+                            // onClick={console.log("Show all NFTs from this minter!")}
+                            my={2}
+                        >{nft.minter}
+                        </Text>
+                        <TimeAgo
+                            className={`text-[11px] font-light order-last p-3 opacity-50`}
+                            datetime={nft.createdAt}
+                        />
+                    </Box >
+                </ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
                     <Box m={3} className="flex">
                         <VStack>
                             <ChakraImage
@@ -334,7 +342,7 @@ const EnlargedPost = ({ nft , postBg, nftLikes, nftComments, onLikeClick, onComm
                                 />
                             </Box>
                         </VStack>
-                        
+
                         <VStack className=" m-5">
                             <Text
                                 className="font-extrabold"
@@ -345,14 +353,14 @@ const EnlargedPost = ({ nft , postBg, nftLikes, nftComments, onLikeClick, onComm
                             <CommentSection
                                 comments={nftComments}
                             />
-                        </VStack> 
+                        </VStack>
                     </Box>
-            </ModalBody>
-            <ModalFooter>
-            </ModalFooter>
-          </ModalContent>
+                </ModalBody>
+                <ModalFooter>
+                </ModalFooter>
+            </ModalContent>
         </Modal>
     );
-  };
+};
 
-  export default Post;
+export default Post;

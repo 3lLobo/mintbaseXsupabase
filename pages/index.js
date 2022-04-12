@@ -1,39 +1,60 @@
 import Header from '../components/Header'
 import Head from '../components/Head'
 import Feed from '../components/Feed'
-import { Text, Box, Center, Image, Heading, HStack, Button , useColorModeValue, Show, Hide} from '@chakra-ui/react'
+import { Text, Box, Center, Image, Heading, HStack, Button, useColorModeValue, Show, Hide, Link } from '@chakra-ui/react'
 import { useUser } from '../hooks/authUser'
 import { graphqlSync } from 'graphql'
+import { useState, useReducer } from 'react'
+import { createApolloClient } from '../utils/initApolloMintbase'
+
 
 
 
 const Index = () => {
 
-  const user = useUser() ;
+  const user = useUser();
+  // console.log("User", user.user)
   const bg = useColorModeValue("white", "#030406");
+
+  function networkReducer(mintbaseNetwork, action) {
+    if (action === "mainnet") {
+      const mClient = createApolloClient(action);
+
+      return { client: mClient, network: action };
+    } else if (action === 'testnet') {
+      const mClient = createApolloClient(action);
+
+      return { client: mClient, network: action };
+    } else { throw new Error(); }
+  }
+
+  const [mintbaseNetwork, setMintbaseNetwork] = useReducer(networkReducer, {client: createApolloClient("testnet"), network: "testnet"});
 
   return (
     <Box>
       <Head />
-      <Header />
+      <Header mintbaseNetwork={mintbaseNetwork} setMintbaseNetwork={setMintbaseNetwork} />
       <main>
-        {user ? 
-          <Feed /> : (
+        {user.user
+        // {true
+          ? <Feed mintbaseNetwork={mintbaseNetwork} />
+          :
           <HStack bg={bg}>
-          <Hide below='md'>
-            <Box>
+            <Hide below='md'>
+              <Box>
                 <Image boxSize='95%' height={"100vh"} objectFit='cover' src='/images/hero-image.jpg' />
               </Box>
-          </Hide>  
+            </Hide>
             <Box p={10} m={10}>
-              <Heading textAlign={"center"} p={2} as='h1' size={"4xl"} > All <br/>your NFTs <br/>in one place </Heading>
+              <Heading textAlign={"center"} p={2} as='h1' size={"4xl"} > All <br />your NFTs <br />in one place </Heading>
               <Text align={"center"} m={4} >Dopest NFTs from Mintbase. Collect, Like & Share now!</Text>
               <Center>
-                <Button p={5} size={"lg"} color={"blue.100"} bg={'gray.700'} > Login </Button>
+                <Link href="/auth">
+                  <Button p={5} size={"lg"} color={"blue.100"} bg={'gray.700'}> Login </Button>
+                </Link>
               </Center>
             </Box>
           </HStack>
-          )
         }
       </main>
     </Box>

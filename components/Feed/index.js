@@ -1,6 +1,7 @@
 import { Box, Button } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useQuery, gql } from '@apollo/client';
+import { createApolloClient } from "../../utils/initApolloMintbase";
 import { useEffect, useState } from 'react';
 import { GET_LATEST_NFTS, GET_ALL_STORES } from '../../utils/mintbaseQueries'
 
@@ -29,7 +30,8 @@ const LazyPosts = dynamic(() => import("../Post/post"), {
     ),
 });
 
-const Feed = () => {
+const Feed = ({mintbaseNetwork}) => {
+
 
     // Filter the duplicate tokens
     function filterDups(arr) {
@@ -45,8 +47,12 @@ const Feed = () => {
         return uniqueArr
     }
 
+    // const mintbaseClient = createApolloClient(mintbaseNetwork);
+    console.log(mintbaseNetwork.client)
+
     const [unique, setUnique] = useState()
     const { loading, error, data } = useQuery(GET_LATEST_NFTS, {
+        client: mintbaseNetwork.client,
         variables: {
             "orderBy": [
                 {
@@ -77,6 +83,7 @@ const Feed = () => {
                             return (
                                 <div maxW={500} colSpan={1} className="flex flex-col hover:drop-shadow-lg">
                                     <LazyPosts
+                                        mintbaseNetwork={mintbaseNetwork}
                                         key={nft.thing.id}
                                         nft={nft}
                                     />
