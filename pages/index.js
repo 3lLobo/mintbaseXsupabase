@@ -31,7 +31,7 @@ const Index = () => {
               <Heading textAlign={"center"} p={2} as='h1' size={"4xl"} > All <br />your NFTs <br />in one place </Heading>
               <Text align={"center"} m={4} >Dopest NFTs from Mintbase. Collect, Like & Share now!</Text>
               <Center>
-                <Button p={5} size={"lg"} color={"blue.100"} bg={'gray.700'} > Login </Button>
+                <Button p={5} size={"lg"} color={"blue.100"} bg={'gray.700'} href="/auth"> Login </Button>
               </Center>
             </Box>
           </HStack>

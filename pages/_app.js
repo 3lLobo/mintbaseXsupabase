@@ -11,8 +11,8 @@ import '../styles/globals.css'
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const brand = extendTheme({
+  initialColorMode: 'dark',
   fonts: {
-    // font-family: 'Manjari', sans-serif;
     heading: "Manjari",
     body: "Manjari",
   },
