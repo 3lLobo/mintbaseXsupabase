@@ -12,7 +12,7 @@ export default function Profile() {
   return (
     <>
       <Head />
-      <Header />
+      {/* <Header /> */}
       {user && (
         <div style={{ maxWidth: '620px', margin: '96px auto' }}>
           <Card>
