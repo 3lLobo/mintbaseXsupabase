@@ -1,7 +1,7 @@
 import Header from '../components/Header'
 import Head from '../components/Head'
 import Feed from '../components/Feed'
-import { Text, Box, Center, Image, Heading, HStack, Button, useColorModeValue, Show, Hide } from '@chakra-ui/react'
+import { Text, Box, Center, Image, Heading, HStack, Button, useColorModeValue, Show, Hide, Link } from '@chakra-ui/react'
 import { useUser } from '../hooks/authUser'
 import { graphqlSync } from 'graphql'
 
@@ -31,7 +31,9 @@ const Index = () => {
               <Heading textAlign={"center"} p={2} as='h1' size={"4xl"} > All <br />your NFTs <br />in one place </Heading>
               <Text align={"center"} m={4} >Dopest NFTs from Mintbase. Collect, Like & Share now!</Text>
               <Center>
-                <Button p={5} size={"lg"} color={"blue.100"} bg={'gray.700'} href="/auth"> Login </Button>
+                <Link href="/auth">
+                  <Button p={5} size={"lg"} color={"blue.100"} bg={'gray.700'}> Login </Button>
+                </Link>
               </Center>
             </Box>
           </HStack>
