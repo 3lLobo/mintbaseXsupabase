@@ -4,7 +4,8 @@ import Feed from '../components/Feed'
 import { Text, Box, Center, Image, Heading, HStack, Button, useColorModeValue, Show, Hide, Link } from '@chakra-ui/react'
 import { useUser } from '../hooks/authUser'
 import { graphqlSync } from 'graphql'
-import React, { useState } from 'react'
+import { useState, useReducer } from 'react'
+import { createApolloClient } from '../utils/initApolloMintbase'
 
 
 
@@ -12,10 +13,22 @@ import React, { useState } from 'react'
 const Index = () => {
 
   const user = useUser();
-  console.log("User", user.user)
+  // console.log("User", user.user)
   const bg = useColorModeValue("white", "#030406");
-  const [mintbaseNetwork, setMintbaseNetwork] = useState("testnet")
 
+  function networkReducer(mintbaseNetwork, action) {
+    if (action === "mainnet") {
+      const mClient = createApolloClient(action);
+
+      return { client: mClient, network: action };
+    } else if (action === 'testnet') {
+      const mClient = createApolloClient(action);
+
+      return { client: mClient, network: action };
+    } else { throw new Error(); }
+  }
+
+  const [mintbaseNetwork, setMintbaseNetwork] = useReducer(networkReducer, {client: createApolloClient("testnet"), network: "testnet"});
 
   return (
     <Box>

@@ -29,19 +29,19 @@ const brand = extendTheme({
   }}
 )
 // const theme = (brand);
-const mintbaseClient = createApolloClient();
+// const mintbaseClient = createApolloClient("mainnet");
 
 export default function MyApp({ Component, pageProps }) {
   return (
     <main className={'dark'}>
       <UserContextProvider>
-        <ApolloProvider client={mintbaseClient}>
+        {/* <ApolloProvider client={mintbaseClient}> */}
           <ChakraProvider theme={brand}>
             {/* <ThemeProvider attribute="class"> */}
               <Component {...pageProps} />
             {/* </ThemeProvider> */}
           </ChakraProvider>
-        </ApolloProvider>
+        {/* </ApolloProvider> */}
       </UserContextProvider>
     </main>
   )

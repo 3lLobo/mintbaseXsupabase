@@ -206,8 +206,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
                                 <Avatar
                                     className=" bg-slate-300 hover:cursor-pointer hover:border-gray-400 hover:border-2"
                                     bg={postBg}
-                                    name={nft.minter
-                                    }
+                                    name={nft.minter}
                                     src={nft.thing.store.iconBase64}
                                     size="sm"
                                 // onClick={console.log("Show all NFTs from this store")}
