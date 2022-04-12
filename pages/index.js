@@ -4,6 +4,8 @@ import Feed from '../components/Feed'
 import { Text, Box, Center, Image, Heading, HStack, Button, useColorModeValue, Show, Hide, Link } from '@chakra-ui/react'
 import { useUser } from '../hooks/authUser'
 import { graphqlSync } from 'graphql'
+import React, { useState } from 'react'
+
 
 
 
@@ -12,14 +14,17 @@ const Index = () => {
   const user = useUser();
   console.log("User", user.user)
   const bg = useColorModeValue("white", "#030406");
+  const [mintbaseNetwork, setMintbaseNetwork] = useState("testnet")
+
 
   return (
     <Box>
       <Head />
-      <Header />
+      <Header mintbaseNetwork={mintbaseNetwork} setMintbaseNetwork={setMintbaseNetwork} />
       <main>
         {user.user
-          ? <Feed />
+        // {true
+          ? <Feed mintbaseNetwork={mintbaseNetwork} />
           :
           <HStack bg={bg}>
             <Hide below='md'>

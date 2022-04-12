@@ -29,7 +29,7 @@ const LazyPosts = dynamic(() => import("../Post/post"), {
     ),
 });
 
-const Feed = () => {
+const Feed = ({mintbaseNetwork}) => {
 
     // Filter the duplicate tokens
     function filterDups(arr) {
@@ -77,6 +77,7 @@ const Feed = () => {
                             return (
                                 <div maxW={500} colSpan={1} className="flex flex-col hover:drop-shadow-lg">
                                     <LazyPosts
+                                        mintbaseNetwork={mintbaseNetwork}
                                         key={nft.thing.id}
                                         nft={nft}
                                     />

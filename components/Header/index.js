@@ -1,4 +1,3 @@
-import React from 'react'
 import AuthUser from '../../hooks/authUser'
 import { Disclosure } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
@@ -10,7 +9,8 @@ import { SignOut, useUser } from '../../hooks/authUser'
 import ToggleMode from './toggle-mode'
 import { Box, useColorModeValue, DarkMode } from '@chakra-ui/react'
 
-export default function Header() {
+export default function Header({mintbaseNetwork, setMintbaseNetwork}) {
+
 
     const { user } = useUser()
     return (

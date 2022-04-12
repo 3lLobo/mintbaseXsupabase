@@ -22,7 +22,7 @@ export const CommentSection = ({ comments }) => {
             {/* <Stack> */}
                 {comments.map((cmnt) => {
                     return (
-                        <Comment comment={cmnt} />
+                        <Comment key={cmnt.id} comment={cmnt} />
                     )
                 })}
                 {/* <Text>Latest Comment</Text>
