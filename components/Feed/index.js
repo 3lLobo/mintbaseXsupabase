@@ -2,7 +2,7 @@ import { Box, Button } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useQuery, gql } from '@apollo/client';
 import { createApolloClient } from "../../utils/initApolloMintbase";
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { GET_LATEST_NFTS, GET_ALL_STORES } from '../../utils/mintbaseQueries'
 
 
@@ -30,7 +30,7 @@ const LazyPosts = dynamic(() => import("../Post/post"), {
     ),
 });
 
-const Feed = ({mintbaseNetwork}) => {
+const Feed = ({ mintbaseNetwork }) => {
 
 
     // Filter the duplicate tokens
@@ -47,8 +47,19 @@ const Feed = ({mintbaseNetwork}) => {
         return uniqueArr
     }
 
-    // const mintbaseClient = createApolloClient(mintbaseNetwork);
-    console.log(mintbaseNetwork.client)
+    function loadReducer(load, action) {
+        switch (action) {
+            case "load more":
+                return { "limit": load.limit + 36 }
+            case "load less":
+                if ((load.limit - 36) < 1) {
+                    return { "limit": 1 }
+                } else {
+                    return { "limit": load.limit - 36 }
+                }
+        }
+    }
+    const [load, setLoad] = useReducer(loadReducer, {limit: 36})
 
     const [unique, setUnique] = useState()
     const { loading, error, data } = useQuery(GET_LATEST_NFTS, {
@@ -59,7 +70,7 @@ const Feed = ({mintbaseNetwork}) => {
                     "createdAt": "desc"
                 }
             ],
-            "limit": 40,
+            "limit": load.limit,
         },
         pollInterval: 900
     });
@@ -76,21 +87,30 @@ const Feed = ({mintbaseNetwork}) => {
             <Box
                 gap="20px"
                 className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 "
-            > 
-                    {loading
-                        ? <SpinnerContainer />
-                        : unique?.map((nft) => {
-                            return (
-                                <div maxW={500} colSpan={1} className="flex flex-col hover:drop-shadow-lg">
-                                    <LazyPosts
-                                        mintbaseNetwork={mintbaseNetwork}
-                                        key={nft.thing.id}
-                                        nft={nft}
-                                    />
-                                </div>
-                            )
-                        })
-                    }
+            >
+                {loading
+                    ? <SpinnerContainer />
+                    : unique?.map((nft) => {
+                        return (
+                            <div maxW={500} colSpan={1} className="flex flex-col hover:drop-shadow-lg">
+                                <LazyPosts
+                                    mintbaseNetwork={mintbaseNetwork}
+                                    key={nft.thing.id}
+                                    nft={nft}
+                                />
+                            </div>
+                        )
+                    })
+                }
+            </Box>
+            <Box
+            className="place-content-center"
+            >
+                <Button
+                onClick={() => setLoad("load more")}
+                >
+                    {"Load more"}
+                </Button>
             </Box>
         </Box>
     );

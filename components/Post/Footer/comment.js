@@ -5,7 +5,8 @@ import {
 } from "@chakra-ui/react";
 import TimeAgo from "timeago-react";
 import { useUser } from "../../../hooks/authUser";
-
+import { supabase } from "../../../utils/initSupabase";
+import { useState, useEffect } from "react"
 
 const CommentOther = ({ comment }) => {
 
@@ -15,6 +16,7 @@ const CommentOther = ({ comment }) => {
             bg={bg}
             className="rounded-2xl pt-1 px-3 w-fit text-left"
         >
+            <CommentAuthor comment={comment}></CommentAuthor>
             <Text fontSize={"xs"}
             > {comment.text || ""}
             </Text>
@@ -30,12 +32,12 @@ const CommentSelf = ({ comment }) => {
     const bg = useColorModeValue("teal.300", "teal.700");
     return (
         <Box
-        bg={bg}
-        className="rounded-2xl py-1 px-3 w-fit ml-auto text-right"
+            bg={bg}
+            className="rounded-2xl py-1 px-3 w-fit ml-auto text-right"
         >
-            <CommnetAuthor author={comment.user_id}></CommnetAuthor>
+            <CommentAuthor comment={comment}></CommentAuthor>
             <Text
-            className=""
+                className=""
             > {comment.text || ""}
             </Text>
             <CommentTimestamp
@@ -55,13 +57,28 @@ const CommentTimestamp = (timestamp) => {
     )
 }
 
-const CommnetAuthor = ({author}) => {
+const CommentAuthor = ({ comment }) => {
+
+    const [author, setAuthor] = useState("Anonymous")
+
+    useEffect(() => {
+        async function getAuthor() {
+            const { error, data } = await supabase.from('users').select('full_name').eq('id', comment.user_id)
+            // console.log(data)
+            if (data.length > 0) {
+                setAuthor(data[0].full_name)
+            }
+        }
+        var atr = getAuthor()
+    }, [author, comment.user_id])
+
 
     return (
-        <Box>
+        <Box className="text-xs px-2 text-neutral-400">
             <Text>
                 {author || "Anonymous"}
             </Text>
+
         </Box>
     )
 }
