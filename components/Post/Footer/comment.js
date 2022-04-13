@@ -10,19 +10,18 @@ import { useState, useEffect } from "react"
 
 const CommentOther = ({ comment }) => {
 
-    const bg = useColorModeValue("#e5e5e5", "#404040");
+    const bg = useColorModeValue("pink.100", "pink.800");
     return (
         <Box
             bg={bg}
-            className="rounded-2xl pt-1 px-3 w-fit text-left"
+            className="rounded-2xl pt-1 px-2 w-fit text-left"
         >
-            <CommentAuthor comment={comment}></CommentAuthor>
-            <Text fontSize={"xs"}
-            > {comment.text || ""}
-            </Text>
-            <CommentTimestamp
-                timestamp={comment.created_at}
-            />
+            <Box className="flex">
+                <CommentAuthor comment={comment}></CommentAuthor>
+                <Text className="text-s font-semibold px-3 mt-1"
+                > {comment.text || ""}
+                </Text>
+            </Box>
         </Box>
     )
 }
@@ -40,9 +39,6 @@ const CommentSelf = ({ comment }) => {
                 className=""
             > {comment.text || ""}
             </Text>
-            <CommentTimestamp
-                timestamp={comment.created_at}
-            />
         </Box>
     )
 }
@@ -51,7 +47,7 @@ const CommentTimestamp = (timestamp) => {
 
     return (
         <TimeAgo
-            className="text-xs px-2 text-neutral-400"
+            className="text-xs  text-neutral-400"
             datetime={timestamp.timestamp}
         />
     )
@@ -72,12 +68,15 @@ const CommentAuthor = ({ comment }) => {
         var atr = getAuthor()
     }, [author, comment.user_id])
 
+    const className = useColorModeValue("text-xs text-neutral-600 font-semibold", "text-xs text-neutral-300 font-light")
+
 
     return (
-        <Box className="text-xs px-2 text-neutral-400">
+        <Box className={className}>
             <Text>
                 {author || "Anonymous"}
             </Text>
+            <CommentTimestamp timestamp={comment.created_at} />
 
         </Box>
     )

@@ -61,13 +61,13 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork }) {
                                             </a>
                                         ))}
                                         <ToggleNetwork network={mintbaseNetwork} setNetwork={setMintbaseNetwork} />
-                                        <DarkMode>
-                                            <Box>
-                                                <Text className="mt-2">
+                                        <Box>
+                                            <DarkMode>
+                                                <Text className="mt-2 text-slate-100">
                                                     {mintbaseNetwork.network}
                                                 </Text>
-                                            </Box>
-                                        </DarkMode>
+                                            </DarkMode>
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Box>
@@ -97,6 +97,14 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork }) {
                                     {item.name}
                                 </a>
                             ))}
+                            <Box>
+                            <ToggleNetwork network={mintbaseNetwork} setNetwork={setMintbaseNetwork} />
+                                <DarkMode>
+                                    <Text className="mt-2 text-slate-100">
+                                        {mintbaseNetwork.network}
+                                    </Text>
+                                </DarkMode>
+                            </Box>
                         </Box>
                     </Disclosure.Panel>
                 </>
