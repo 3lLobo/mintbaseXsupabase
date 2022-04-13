@@ -7,7 +7,7 @@ import Navigation from './navigation'
 import classNames from '../../utils/classsesNames'
 import { SignOut, useUser } from '../../hooks/authUser'
 import ToggleMode from './toggle-mode'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, DarkMode } from '@chakra-ui/react'
 import { ToggleNetwork } from "./toggleNetwork"
 
 export default function Header({ mintbaseNetwork, setMintbaseNetwork }) {
@@ -61,9 +61,13 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork }) {
                                             </a>
                                         ))}
                                         <ToggleNetwork network={mintbaseNetwork} setNetwork={setMintbaseNetwork} />
-                                        <Text className="mt-2">
-                                            {mintbaseNetwork.network}
-                                        </Text>
+                                        <Box>
+                                            <DarkMode>
+                                                <Text className="mt-2 text-slate-100">
+                                                    {mintbaseNetwork.network}
+                                                </Text>
+                                            </DarkMode>
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Box>
@@ -93,10 +97,19 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork }) {
                                     {item.name}
                                 </a>
                             ))}
+                            <Box>
+                            <ToggleNetwork network={mintbaseNetwork} setNetwork={setMintbaseNetwork} />
+                                <DarkMode>
+                                    <Text className="mt-2 text-slate-100">
+                                        {mintbaseNetwork.network}
+                                    </Text>
+                                </DarkMode>
+                            </Box>
                         </Box>
                     </Disclosure.Panel>
                 </>
-            )}
-        </Disclosure>
+            )
+            }
+        </Disclosure >
     )
 }

@@ -9,9 +9,8 @@ import {
     Tag,
     Divider,
     Text,
-    Link
-} from "@chakra-ui/react";
-import {
+    Link,
+    HStack,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -20,6 +19,7 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
+    IconButton,
     Lorem
 } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
@@ -39,6 +39,7 @@ import { useUser } from "../../hooks/authUser";
 import { SpinnerContainer } from "../Spinner";
 import { InteractionBar } from "./Footer/interactionBar";
 import { CommentSection } from "./Footer/commentSection";
+import { GiCrownedHeart } from "react-icons/gi"
 
 
 const Post = ({ nft, mintbaseNetwork }) => {
@@ -236,22 +237,6 @@ const Post = ({ nft, mintbaseNetwork }) => {
                                 objectFit="cover"
                                 className="hover:cursor-pointer"
                             />
-                            <VStack className="m-3">
-                                <Text
-                                    align={"center"}
-                                    className="font-extrabold"
-                                    my={2}
-                                >{nft.thing.metadata?.title}</Text>
-                                <Box p={2} className="overflow-hidden"><Text align={"center"}>{nft.thing.metadata?.description}</Text></Box>
-                                <Tag
-                                    color="gray.400"
-                                    className="ml-3 mr-1"
-                                    size={"sm"}
-                                // onClick={console.log("Filter for this media type!")}
-                                >
-                                    {nft.thing.metadata?.media_type}
-                                </Tag>
-                            </VStack>
                         </Box>
                         <Divider />
                         <InteractionBar
@@ -262,9 +247,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
                             onLikeClick={onLikeClick}
                             onComment={onComment}
                             setUserComment={setUserComment}
-                        />
-                        <CommentSection
-                            comments={nftComments}
+                            commentCount={nftComments.length || '0'}
                         />
                     </Box>
                 }
@@ -279,13 +262,20 @@ const Post = ({ nft, mintbaseNetwork }) => {
 
 const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComment, setUserComment, userLike, state }) => {
     const [isOpen, onClose] = state;
+
     return (
-        <Modal isOpen={isOpen} size={"5xl"} colorScheme={postBg} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
+        <Modal
+            isOpen={isOpen}
+            size={"5xl"}
+            onClose={onClose}
+        >
+            <ModalOverlay
+            />
+            <ModalContent
+            >
                 <ModalHeader>
                     <Box
-                        className="flex"
+                        className="flex rounded-full"
                     >
                         <Avatar
                             className=" bg-slate-300 hover:cursor-pointer hover:border-gray-400 hover:border-2"
@@ -304,9 +294,17 @@ const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComme
                         >{nft.minter}
                         </Text>
                         <TimeAgo
-                            className={`text-[11px] font-light order-last p-3 opacity-50`}
+                            className={`text-[11px] font-light p-3 opacity-50`}
                             datetime={nft.createdAt}
                         />
+                        <IconButton
+                            variant={"ghost"}
+                            className="ml-auto h-6 mr-3"
+                            icon={<GiCrownedHeart className="fill-red-500" />}
+                            isRound
+                        // onClick={}
+                        >
+                        </IconButton>
                     </Box >
                 </ModalHeader>
                 <ModalCloseButton />
@@ -339,17 +337,34 @@ const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComme
                                     onLikeClick={onLikeClick}
                                     onComment={onComment}
                                     setUserComment={setUserComment}
+                                    isOpen={isOpen}
+                                    commentCount={nftComments.length || "0"}
                                 />
                             </Box>
                         </VStack>
-
                         <VStack className=" m-5">
-                            <Text
-                                className="font-extrabold"
-                                my={2}
-                            >{nft.thing.metadata?.title}</Text>
+                            <HStack >
+                                <Text>
+                                    Title:
+                                </Text>
+                                <Text
+                                    className="font-extrabold"
+                                    my={2}
+                                >{nft.thing.metadata?.title}
+                                </Text>
+                            </HStack>
                             <Divider />
-                            <Box p={2} className="overflow-hidden"><Text align={"center"}>{nft.thing.metadata?.description}</Text></Box>
+                            <HStack>
+
+                                <Text>
+                                    Description:
+                                </Text>
+                                <Box p={2} className="overflow-hidden">
+                                    <Text align={"center"} className="font-semibold">
+                                        {nft.thing.metadata?.description}
+                                    </Text>
+                                </Box>
+                            </HStack>
                             <CommentSection
                                 comments={nftComments}
                             />

@@ -9,27 +9,27 @@ import {
     Stack,
 } from "@chakra-ui/react";
 import { GiCrownedHeart } from "react-icons/gi";
-import { MdOutlineThumbDown, MdOutlineThumbUp, MdOutlineThumbUpAlt, MdOutlineThumbUpOffAlt, MdSend } from "react-icons/md"
+import { MdOutlineThumbDown, MdOutlineThumbUp, MdOutlineThumbUpAlt, MdOutlineThumbUpOffAlt, MdSend, MdChat } from "react-icons/md"
 
 
-export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClick, onComment, setUserComment }) => {
+export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClick, onComment, setUserComment, commentCount }) => {
 
     // console.log("MyLike:", userLike)
 
     function updateComment(e) {
         e.preventDefault();
         const val = e.currentTarget.value;
-        setUserComment(() => {return val})
+        setUserComment(() => { return val })
     }
 
     return (
         <Box>
             <Box
-                p={2}
+                py={2}
                 className="flex"
             >
                 <IconButton
-                    className="mr-3"
+                    className="mr-1"
                     variant={"ghost"}
                     colorScheme={(userLike?.value === true) && "green" || "gray"}
                     icon={<MdOutlineThumbUp />}
@@ -37,11 +37,11 @@ export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClic
                     onClick={() => onLikeClick("true")}
                 >
                 </IconButton>
-                <Text p={2}>
+                <Text py={2}>
                     {likes || 0}
                 </Text>
                 <IconButton
-                    className="mr-3 ml-3"
+                    className="mr-1 ml-3"
                     variant={"ghost"}
                     colorScheme={(userLike?.value === false) && "red" || "gray"}
                     icon={<MdOutlineThumbDown />}
@@ -49,37 +49,35 @@ export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClic
                     onClick={() => onLikeClick("false")}
                 >
                 </IconButton>
-                <Text p={2}>
+                <Text py={2}>
                     {dislikes || 0}
                 </Text>
-                <IconButton
+                <IconButton 
                     variant={"ghost"}
-                    className="ml-auto h-6 mr-3"
-                    icon={<GiCrownedHeart className="fill-red-500" />}
+                    className="ml-auto h-6 mr-1"
+                    icon={<MdChat />}
                     isRound
-                // onClick={}
-                >
-                </IconButton>
-                <Text p={2}>
-                    {favorite || 111}
+                />
+                <Text className="my-2" >
+                    {commentCount}
                 </Text>
             </Box>
             <Box
                 className=" mr-1 flex"
             >
-                <Input 
-                w={"100%"}
-                variant='filled' 
-                placeholder='Comment'
-                focusBorderColor = "gray.400"
-                onChange={(e) => updateComment(e)}
+                <Input
+                    w={"100%"}
+                    variant='filled'
+                    placeholder='Comment'
+                    focusBorderColor="gray.400"
+                    onChange={(e) => updateComment(e)}
                 />
-                <IconButton 
-                ml={3}
-                isRound
-                variant={"ghost"}
-                icon={<MdSend />}
-                onClick={onComment}
+                <IconButton
+                    ml={3}
+                    isRound
+                    variant={"ghost"}
+                    icon={<MdSend />}
+                    onClick={onComment}
                 />
             </Box>
         </Box>
