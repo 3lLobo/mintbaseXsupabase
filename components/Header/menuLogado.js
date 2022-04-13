@@ -9,14 +9,23 @@ import { supabase } from '../../utils/initSupabase'
 
 
 const MenuLogado = ({ user }) => {
-  console.log("USER : ", user)
+  // console.log("USER : ", user)
 
   useEffect(() => {
-    if (user.user_metadata.full_name) {
-      supabase
+    async function updateUsername() {
+      // console.log("Upadte User name: ", user.user_metadata.full_name)
+      const { data, error } = await  supabase
         .from('users')
-        .update({ full_name: user.user_metadata.full_name })
-        .eq("id", user.user.id)
+        .update({ "full_name": user.user_metadata.full_name })
+        .eq("id", user.id)
+  
+        if (error) {
+          console.log("SUpaError: ", error)
+        }
+    }
+
+    if (user.user_metadata?.full_name) {
+      updateUsername()
     }
   }, [user, supabase])
 

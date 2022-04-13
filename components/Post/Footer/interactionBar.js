@@ -7,12 +7,13 @@ import {
     Input,
     IconButton,
     Stack,
+    FormControl,
 } from "@chakra-ui/react";
 import { GiCrownedHeart } from "react-icons/gi";
 import { MdOutlineThumbDown, MdOutlineThumbUp, MdOutlineThumbUpAlt, MdOutlineThumbUpOffAlt, MdSend, MdChat } from "react-icons/md"
 
 
-export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClick, onComment, setUserComment, commentCount }) => {
+export const InteractionBar = ({ likes, dislikes, userLike, onLikeClick, onComment, userComment, setUserComment, commentCount }) => {
 
     // console.log("MyLike:", userLike)
 
@@ -20,6 +21,12 @@ export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClic
         e.preventDefault();
         const val = e.currentTarget.value;
         setUserComment(() => { return val })
+    }
+
+    function handleKeyDown(e) {
+        if (e.keyCode === 13) {
+            onComment(e)
+        }
     }
 
     return (
@@ -52,7 +59,7 @@ export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClic
                 <Text py={2}>
                     {dislikes || 0}
                 </Text>
-                <IconButton 
+                <IconButton
                     variant={"ghost"}
                     className="ml-auto h-6 mr-1"
                     icon={<MdChat />}
@@ -62,24 +69,28 @@ export const InteractionBar = ({ likes, dislikes, favorite, userLike, onLikeClic
                     {commentCount}
                 </Text>
             </Box>
-            <Box
+            <FormControl
                 className=" mr-1 flex"
             >
                 <Input
+                    id="commentInput"
                     w={"100%"}
                     variant='filled'
                     placeholder='Comment'
+                    value={userComment}
                     focusBorderColor="gray.400"
                     onChange={(e) => updateComment(e)}
+                    onKeyDown={handleKeyDown}
                 />
                 <IconButton
+                    type="submit"
                     ml={3}
                     isRound
                     variant={"ghost"}
                     icon={<MdSend />}
                     onClick={onComment}
                 />
-            </Box>
+            </FormControl>
         </Box>
     )
 }

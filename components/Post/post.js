@@ -117,7 +117,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
                         "mintbase_thing_id": nft.thing.id,
                         "store_id": nft.thing.store.id,
                         "minter_id": nft.minter,
-                        "network": mintbaseNetwork
+                        "network": mintbaseNetwork.network
                     }]
                 },
             });
@@ -160,7 +160,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
                 return
             }
         } else {
-            console.log("Adding new like: ", nft, user)
+            console.log("Adding new like: ", nft, user, like)
             await addLike({
                 variables: {
                     "objects": [{
@@ -246,13 +246,24 @@ const Post = ({ nft, mintbaseNetwork }) => {
                             userLike={userLike}
                             onLikeClick={onLikeClick}
                             onComment={onComment}
+                            userComment={userComment}
                             setUserComment={setUserComment}
                             commentCount={nftComments.length || '0'}
                         />
                     </Box>
                 }
             </Box >
-            <EnlargedPost nft={nft} nftLikes={nftLikes} userLike={userLike} postBg={postBg} nftComments={nftComments} onLikeClick={onLikeClick} onComment={onComment} setUserComment={setUserComment} state={[isOpen, onClose]} />
+            <EnlargedPost 
+            nft={nft} 
+            nftLikes={nftLikes} 
+            userLike={userLike} 
+            postBg={postBg} 
+            nftComments={nftComments} 
+            onLikeClick={onLikeClick} 
+            onComment={onComment} 
+            userComment={userComment}
+            setUserComment={setUserComment} 
+            state={[isOpen, onClose]} />
         </>
     );
 };
@@ -260,7 +271,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
 
 //Modal which opens on clicking over a post 
 
-const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComment, setUserComment, userLike, state }) => {
+const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComment, userComment, setUserComment, userLike, state }) => {
     const [isOpen, onClose] = state;
 
     return (
@@ -336,6 +347,7 @@ const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComme
                                     userLike={userLike}
                                     onLikeClick={onLikeClick}
                                     onComment={onComment}
+                                    userComment={userComment}
                                     setUserComment={setUserComment}
                                     isOpen={isOpen}
                                     commentCount={nftComments.length || "0"}
