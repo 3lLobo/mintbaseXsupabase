@@ -13,7 +13,7 @@ import { GiCrownedHeart } from "react-icons/gi";
 import { MdOutlineThumbDown, MdOutlineThumbUp, MdOutlineThumbUpAlt, MdOutlineThumbUpOffAlt, MdSend, MdChat } from "react-icons/md"
 
 
-export const InteractionBar = ({ likes, dislikes, userLike, onLikeClick, onComment, userComment, setUserComment, commentCount }) => {
+export const InteractionBar = ({ likes, dislikes, userLike, onLikeClick, onComment, userComment, setUserComment, commentCount, onOpen }) => {
 
     // console.log("MyLike:", userLike)
 
@@ -64,6 +64,7 @@ export const InteractionBar = ({ likes, dislikes, userLike, onLikeClick, onComme
                     className="ml-auto h-6 mr-1"
                     icon={<MdChat />}
                     isRound
+                    onClick={onOpen && onOpen}
                 />
                 <Text className="my-2" >
                     {commentCount}

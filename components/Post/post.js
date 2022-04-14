@@ -249,6 +249,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
                             userComment={userComment}
                             setUserComment={setUserComment}
                             commentCount={nftComments.length || '0'}
+                            onOpen={onOpen}
                         />
                     </Box>
                 }
