@@ -1,8 +1,8 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Center } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useQuery, gql } from '@apollo/client';
 import { createApolloClient } from "../../utils/initApolloMintbase";
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { GET_LATEST_NFTS, GET_ALL_STORES } from '../../utils/mintbaseQueries'
 
 
@@ -50,8 +50,10 @@ const Feed = ({ mintbaseNetwork }) => {
     function loadReducer(load, action) {
         switch (action) {
             case "load more":
+                setScrollDown(true)
                 return { "limit": load.limit + 36 }
             case "load less":
+                setScrollDown(true)
                 if ((load.limit - 36) < 1) {
                     return { "limit": 1 }
                 } else {
@@ -59,7 +61,9 @@ const Feed = ({ mintbaseNetwork }) => {
                 }
         }
     }
-    const [load, setLoad] = useReducer(loadReducer, {limit: 36})
+    const endRef = useRef()
+    const [scrollDown, setScrollDown] = useState(false)
+    const [load, setLoad] = useReducer(loadReducer, { limit: 36 })
 
     const [unique, setUnique] = useState()
     const { loading, error, data } = useQuery(GET_LATEST_NFTS, {
@@ -77,41 +81,54 @@ const Feed = ({ mintbaseNetwork }) => {
 
     useEffect(() => {
         if (error) { console.log(`Error! ${error.message}`) }
-        if (!loading) { setUnique(filterDups(data)) }
+        if (!loading) {
+            setUnique(filterDups(data))
+            if (scrollDown) {
+                endRef.current.scrollIntoView({ behavior: 'smooth', alignToTop: true })
+            }
+        }
     }, [data, error, loading])
 
     return (
-        <Box
-            className="p-4 relative sm:px-10 "
-        >
+        <Box>
             <Box
-                gap="20px"
-                className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 "
+                className="p-4 relative sm:px-10 "
             >
-                {loading
-                    ? <SpinnerContainer />
-                    : unique?.map((nft) => {
-                        return (
-                            <div maxW={500} colSpan={1} className="flex flex-col hover:drop-shadow-lg">
-                                <LazyPosts
-                                    mintbaseNetwork={mintbaseNetwork}
-                                    key={nft.thing.id}
-                                    nft={nft}
-                                />
-                            </div>
-                        )
-                    })
-                }
-            </Box>
-            <Box
-            className="place-content-center"
-            >
-                <Button
-                onClick={() => setLoad("load more")}
+                <Box
+                    gap="20px"
+                    className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 "
                 >
-                    {"Load more"}
-                </Button>
+                    {loading
+                        ? <SpinnerContainer />
+                        : unique?.map((nft) => {
+                            return (
+                                <div maxW={500} colSpan={1} className="flex flex-col hover:drop-shadow-lg">
+                                    <LazyPosts
+                                        mintbaseNetwork={mintbaseNetwork}
+                                        key={nft.thing.id}
+                                        nft={nft}
+                                    />
+                                </div>
+                            )
+                        })
+                    }
+                </Box>
             </Box>
+            {!loading &&
+                <Box
+                    className="relative flex mb-11 drop-shadow-lg"
+                >
+                    <Button
+                        ref={endRef}
+                        variant="solid"
+                        colorScheme="teal"
+                        className="mx-auto font-bold"
+                        onClick={() => setLoad("load more")}
+                    >
+                        {"Load more ..."}
+                    </Button>
+                </Box>
+            }
         </Box>
     );
 };
