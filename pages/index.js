@@ -9,6 +9,16 @@ import { useState, useReducer } from 'react'
 import { createApolloClient } from '../utils/initApolloMintbase'
 
 
+const OpenTab = ({openFeed, mintbaseNetwork}) => {
+
+  return (
+    <Box>
+      {openFeed 
+      ? <Feed mintbaseNetwork={mintbaseNetwork} /> 
+      : <Favos mintbaseNetwork={mintbaseNetwork} />}
+    </Box>
+  )
+} 
 
 
 const Index = () => {
@@ -32,35 +42,32 @@ const Index = () => {
   const [mintbaseNetwork, setMintbaseNetwork] = useReducer(networkReducer, { client: createApolloClient("testnet"), network: "testnet" });
   const [openFeed, setOpenFeed] = useState(true)
 
-  const OpenTap = openFeed
-      ? <Feed mintbaseNetwork = { mintbaseNetwork } /> 
-      : <Favos mintbaseNetwork={mintbaseNetwork} />
 
   return (
     <Box>
       <Head />
       <Header mintbaseNetwork={mintbaseNetwork} setMintbaseNetwork={setMintbaseNetwork} openFeed={openFeed} setOpenFeed={setOpenFeed} />
       <main>
-        {user.user
-          // {true
-          ? <OpenTap/>
-        :
-        <HStack bg={bg}>
-          <Hide below='md'>
-            <Box>
-              <Image boxSize='95%' height={"100vh"} objectFit='cover' src='/images/hero-image.jpg' />
+        {/* {user.user */}
+        {true
+          ? <OpenTab openFeed={openFeed} mintbaseNetwork={mintbaseNetwork}/>
+          :
+          <HStack bg={bg}>
+            <Hide below='md'>
+              <Box>
+                <Image boxSize='95%' height={"100vh"} objectFit='cover' src='/images/hero-image.jpg' />
+              </Box>
+            </Hide>
+            <Box p={10} m={10}>
+              <Heading textAlign={"center"} p={2} as='h1' size={"4xl"} > All <br />your NFTs <br />in one place </Heading>
+              <Text align={"center"} m={4} >Dopest NFTs from Mintbase. Collect, Like & Share now!</Text>
+              <Center>
+                <Link href="/auth">
+                  <Button p={5} size={"lg"} color={"blue.100"} bg={'gray.700'}> Login </Button>
+                </Link>
+              </Center>
             </Box>
-          </Hide>
-          <Box p={10} m={10}>
-            <Heading textAlign={"center"} p={2} as='h1' size={"4xl"} > All <br />your NFTs <br />in one place </Heading>
-            <Text align={"center"} m={4} >Dopest NFTs from Mintbase. Collect, Like & Share now!</Text>
-            <Center>
-              <Link href="/auth">
-                <Button p={5} size={"lg"} color={"blue.100"} bg={'gray.700'}> Login </Button>
-              </Link>
-            </Center>
-          </Box>
-        </HStack>
+          </HStack>
         }
       </main>
     </Box>

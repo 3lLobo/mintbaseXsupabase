@@ -48,8 +48,8 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, 
                                         <Box className="flex space-x-4">
                                             <Button
                                                 key="feed"
-                                                _selected={openFeed}
-                                                onClick={setOpenFeed(() => true)}
+                                                isActive={openFeed}
+                                                onClick={() => setOpenFeed(true)}
                                                 className={openFeed
                                                     ? 'bg-gray-900 text-white'
                                                     : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
@@ -60,8 +60,8 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, 
                                             </Button>
                                             <Button
                                                 key="favos"
-                                                _selected={!openFeed}
-                                                onClick={setOpenFeed(() => false)}
+                                                isActive={!openFeed}
+                                                onClick={() => setOpenFeed(false)}
                                                 className={!openFeed
                                                     ? 'bg-gray-900 text-white'
                                                     : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
@@ -95,9 +95,8 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, 
                                 <DarkMode>
                                     <Button
                                         key="feed"
-                                        _selected={openFeed}
-                                        // href={item.href}
-                                        onClick={setOpenFeed(() => true)}
+                                        isActive={openFeed}
+                                        onClick={() => setOpenFeed(true)}
                                         className={openFeed
                                             ? 'bg-gray-900 text-white'
                                             : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
@@ -108,9 +107,8 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, 
                                     </Button>
                                     <Button
                                         key="favos"
-                                        // href={item.href}
-                                        _selected={!openFeed}
-                                        onClick={setOpenFeed(() => false)}
+                                        isActive={!openFeed}
+                                        onClick={() => setOpenFeed(false)}
                                         className={!openFeed
                                             ? 'bg-gray-900 text-white'
                                             : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'

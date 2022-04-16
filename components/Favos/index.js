@@ -50,26 +50,11 @@ const Favos = ({ mintbaseNetwork }) => {
 
     return (
         <Box>
-            <PostGrid 
+            {/* <PostGrid 
             mintbaseNetwork={mintbaseNetwork}
             loading={loading}
             unique={unique}
-            />
-            {!loading &&
-                <Box
-                    className="relative flex mb-11 drop-shadow-lg"
-                >
-                    <Button
-                        ref={endRef}
-                        variant="solid"
-                        colorScheme="teal"
-                        className="mx-auto font-bold"
-                        onClick={() => setLoad("load more")}
-                    >
-                        {"Load more ..."}
-                    </Button>
-                </Box>
-            }
+            /> */}
         </Box>
     );
 };

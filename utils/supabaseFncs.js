@@ -1,6 +1,6 @@
 import { ApolloClient, HttpLink, InMemoryCache, useMutation, useQuery, gql } from '@apollo/client'
 import { InsertComment, InsertLike, InsertNft, DeleteComment, DeleteLike } from './supabaseMutations'
-import { QueryNftAll } from './supabaseQueries'
+import { QueryFavos, QueryNftAll } from './supabaseQueries'
 import { mintbaseNetwork } from './initApolloMintbase'
 
 
@@ -129,7 +129,9 @@ function updateHelper(setUserLike, data, addLike, userLike) {
                 "user_id": userLike.user_id,
                 "nft_id": userLike.nft_id,
                 "value": !userLike.value,
-            }]}}), 1000);
+            }]
+        }
+    }), 1000);
 
     console.log("Supabase Updated Like: ", data)
 }
@@ -138,22 +140,22 @@ function updateHelper(setUserLike, data, addLike, userLike) {
 export function supabaseUpdateLike(setUserLike, userLike, addLike,) {
     const [updLike, { data }] = useMutation(
         DeleteLike, {
-            client: supabaseClient,
-            onCompleted: ((data) => updateHelper(setUserLike, data, addLike, userLike)),
-                onError: ((error) => console.log("Supabase Like Update Error: ", error))
+        client: supabaseClient,
+        onCompleted: ((data) => updateHelper(setUserLike, data, addLike, userLike)),
+        onError: ((error) => console.log("Supabase Like Update Error: ", error))
     })
-//     Call addNft with these args: {
-// {
-//     "filter": {
-//     "nft_id": {
-//         "eq": "SnhecOqJGXbDz5vuvr6p-TES6AWMNtfsokDSzmBWetM:voiceoftheoceans.mintbase1.near"
-//     },
-//     "user_id": {
-//         "eq": "e7c9b32a-5631-4ac8-9894-ad77cdec4407"
-//     },
-//     }
-// }
-return [updLike, { data }]
+    //     Call addNft with these args: {
+    // {
+    //     "filter": {
+    //     "nft_id": {
+    //         "eq": "SnhecOqJGXbDz5vuvr6p-TES6AWMNtfsokDSzmBWetM:voiceoftheoceans.mintbase1.near"
+    //     },
+    //     "user_id": {
+    //         "eq": "e7c9b32a-5631-4ac8-9894-ad77cdec4407"
+    //     },
+    //     }
+    // }
+    return [updLike, { data }]
 }
 
 export function supabaseNftData(nftId) {
@@ -168,5 +170,30 @@ export function supabaseNftData(nftId) {
         }
     })
     if (error) { console.error("supabase error: ", error) }
+    return { data, loading }
+}
+
+
+// TODO add media link to favo table!
+export function supabaseFavos(userId, mainnet) {
+    const { loading, error, data } = useQuery(QueryFavos, {
+        client: supabaseClient,
+        variables: {
+            "filter": {
+                "user_id": {
+                    "eq": userId
+                },
+                "mainnet": {
+                    "eq": mainnet
+                }
+            },
+            "orderBy": [
+                {
+                    "created_at": "DescNullsLast"
+                }
+            ]
+        }
+    })
+    if (error) { console.error("supabase QueryFavos error: ", error) }
     return { data, loading }
 }

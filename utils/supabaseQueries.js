@@ -37,3 +37,40 @@ query NftCollection($filter: NftFilter) {
   }
 }
 `
+
+
+export const QueryFavos = gql`
+query FavoriteCollection($filter: FavoriteFilter, $orderBy: [FavoriteOrderBy!]) {
+  favoriteCollection(filter: $filter, orderBy: $orderBy) {
+    edges {
+      node {
+        id
+        nft {
+          store_id
+          minter_id
+          commentCollection {
+            edges {
+              node {
+                created_at
+                text
+                users {
+                  full_name
+                }
+              }
+            }
+          }
+          likeCollection {
+            edges {
+              node {
+                created_at
+                value
+                user_id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`
