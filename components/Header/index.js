@@ -7,10 +7,10 @@ import Navigation from './navigation'
 import classNames from '../../utils/classsesNames'
 import { SignOut, useUser } from '../../hooks/authUser'
 import ToggleMode from './toggle-mode'
-import { Box, Text, DarkMode } from '@chakra-ui/react'
+import { Box, Text, DarkMode, Button, VStack } from '@chakra-ui/react'
 import { ToggleNetwork } from "./toggleNetwork"
 
-export default function Header({ mintbaseNetwork, setMintbaseNetwork }) {
+export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, setOpenFeed }) {
 
 
     const { user } = useUser()
@@ -26,7 +26,7 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork }) {
                         <Box className="relative flex items-center justify-between h-16">
                             <Box className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                 {/* Mobile menu button*/}
-                                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                                <Disclosure.Button className="inline-flex items-center justify-center p-2 text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                                     <span className="sr-only">Open main menu</span>
                                     {open ? (
                                         <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -44,31 +44,40 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork }) {
                                     />
                                 </Box>
                                 <Box className="hidden sm:block sm:ml-6">
-                                    <Box className="flex space-x-4">
-                                        {Navigation.map((item) => (
-                                            <a
-                                                key={item.name}
-                                                href={item.href}
-                                                className={classNames(
-                                                    item.current
-                                                        ? 'bg-gray-900 text-white'
-                                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                                    'px-3 py-2 rounded-md text-sm font-medium'
-                                                )}
-                                                aria-current={item.current ? 'page' : undefined}
+                                    <DarkMode>
+                                        <Box className="flex space-x-4">
+                                            <Button
+                                                key="feed"
+                                                _selected={openFeed}
+                                                onClick={setOpenFeed(() => true)}
+                                                className={openFeed
+                                                    ? 'bg-gray-900 text-white'
+                                                    : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
+                                                }
+                                                aria-current={openFeed ? 'page' : undefined}
                                             >
-                                                {item.name}
-                                            </a>
-                                        ))}
-                                        <ToggleNetwork network={mintbaseNetwork} setNetwork={setMintbaseNetwork} />
-                                        <Box>
-                                            <DarkMode>
+                                                NFT Feed
+                                            </Button>
+                                            <Button
+                                                key="favos"
+                                                _selected={!openFeed}
+                                                onClick={setOpenFeed(() => false)}
+                                                className={!openFeed
+                                                    ? 'bg-gray-900 text-white'
+                                                    : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
+                                                }
+                                                aria-current={!openFeed ? 'page' : undefined}
+                                            >
+                                                NFT Favos
+                                            </Button>
+                                            <ToggleNetwork network={mintbaseNetwork} setNetwork={setMintbaseNetwork} />
+                                            <Box>
                                                 <Text className="mt-2 text-slate-100">
                                                     {mintbaseNetwork.network}
                                                 </Text>
-                                            </DarkMode>
+                                            </Box>
                                         </Box>
-                                    </Box>
+                                    </DarkMode>
                                 </Box>
                             </Box>
                             <Box className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -82,29 +91,42 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork }) {
 
                     <Disclosure.Panel className="sm:hidden">
                         <Box className="px-2 pt-2 pb-3 space-y-1">
-                            {Navigation.map((item) => (
-                                <a
-                                    key={item.name}
-                                    href={item.href}
-                                    className={classNames(
-                                        item.current
-                                            ? 'bg-gray-900 text-white'
-                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                        'block px-3 py-2 rounded-md text-base font-medium'
-                                    )}
-                                    aria-current={item.current ? 'page' : undefined}
-                                >
-                                    {item.name}
-                                </a>
-                            ))}
-                            <Box>
-                            <ToggleNetwork network={mintbaseNetwork} setNetwork={setMintbaseNetwork} />
+                            <VStack>
                                 <DarkMode>
-                                    <Text className="mt-2 text-slate-100">
-                                        {mintbaseNetwork.network}
-                                    </Text>
+                                    <Button
+                                        key="feed"
+                                        _selected={openFeed}
+                                        // href={item.href}
+                                        onClick={setOpenFeed(() => true)}
+                                        className={openFeed
+                                            ? 'bg-gray-900 text-white'
+                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
+                                        }
+                                        aria-current={openFeed ? 'page' : undefined}
+                                    >
+                                        NFT Feed
+                                    </Button>
+                                    <Button
+                                        key="favos"
+                                        // href={item.href}
+                                        _selected={!openFeed}
+                                        onClick={setOpenFeed(() => false)}
+                                        className={!openFeed
+                                            ? 'bg-gray-900 text-white'
+                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
+                                        }
+                                        aria-current={!openFeed ? 'page' : undefined}
+                                    >
+                                        NFT Favos
+                                    </Button>
+                                    <Box className='flex'>
+                                        <ToggleNetwork network={mintbaseNetwork} setNetwork={setMintbaseNetwork} />
+                                        <Text className="mt-2 text-slate-100">
+                                            {mintbaseNetwork.network}
+                                        </Text>
+                                    </Box>
                                 </DarkMode>
-                            </Box>
+                            </VStack>
                         </Box>
                     </Disclosure.Panel>
                 </>

@@ -4,11 +4,13 @@ import { createApolloClient } from "../../utils/initApolloMintbase";
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { GET_LATEST_NFTS, GET_ALL_STORES } from '../../utils/mintbaseQueries'
 import { PostGrid } from "../Post/postGrid";
+import { useUser } from "../../hooks/authUser";
 
 
 
-const Feed = ({ mintbaseNetwork }) => {
+const Favos = ({ mintbaseNetwork }) => {
 
+    const {user} = useUser();
 
     // Filter the duplicate tokens
     function filterDups(arr) {
@@ -24,24 +26,7 @@ const Feed = ({ mintbaseNetwork }) => {
         return uniqueArr
     }
 
-    function loadReducer(load, action) {
-        switch (action) {
-            case "load more":
-                setScrollDown(true)
-                return { "limit": load.limit + 36 }
-            case "load less":
-                setScrollDown(true)
-                if ((load.limit - 36) < 1) {
-                    return { "limit": 1 }
-                } else {
-                    return { "limit": load.limit - 36 }
-                }
-        }
-    }
-    const endRef = useRef()
-    const [scrollDown, setScrollDown] = useState(false)
-    const [load, setLoad] = useReducer(loadReducer, { limit: 36 })
-
+    // TODO make a new query!
     const [unique, setUnique] = useState()
     const { loading, error, data } = useQuery(GET_LATEST_NFTS, {
         client: mintbaseNetwork.client,
@@ -51,7 +36,7 @@ const Feed = ({ mintbaseNetwork }) => {
                     "createdAt": "desc"
                 }
             ],
-            "limit": load.limit,
+            "limit": 1111,
         },
         pollInterval: 900
     });
@@ -60,9 +45,6 @@ const Feed = ({ mintbaseNetwork }) => {
         if (error) { console.log(`Error! ${error.message}`) }
         if (!loading) {
             setUnique(filterDups(data))
-            if (scrollDown) {
-                endRef.current.scrollIntoView({ behavior: 'smooth', alignToTop: true })
-            }
         }
     }, [data, error, loading])
 
@@ -92,4 +74,4 @@ const Feed = ({ mintbaseNetwork }) => {
     );
 };
 
-export default Feed;
+export default Favos;
