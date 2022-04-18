@@ -1,7 +1,8 @@
 import { ApolloClient, HttpLink, InMemoryCache, useMutation, useQuery, gql } from '@apollo/client'
-import { InsertComment, InsertLike, InsertNft, DeleteComment, DeleteLike } from './supabaseMutations'
+import { InsertComment, InsertLike, InsertNft, DeleteComment, DeleteLike, InsertFavo, DeleteFavo } from './supabaseMutations'
 import { QueryFavos, QueryNftAll } from './supabaseQueries'
 import { mintbaseNetwork } from './initApolloMintbase'
+
 
 
 const supabaseClient = new ApolloClient({
@@ -196,4 +197,55 @@ export function supabaseFavos(userId, mainnet) {
     })
     if (error) { console.error("supabase QueryFavos error: ", error) }
     return { data, loading }
+}
+
+
+function insertFavoHelper(data, setFavo) {
+    console.log("data", data)
+    setFavo((prev) => {
+        return [...prev, data.insertIntoFavoriteCollection.records[0].id]
+    })
+    console.log("Supabase Insterted Favo: ", data)
+}
+
+export function supabaseInsertFavo(setFavo) {
+    const [addFavo, { data }] = useMutation(
+        InsertFavo, {
+        client: supabaseClient,
+        onCompleted: ((data) => insertFavoHelper(data, setFavo)),
+        onError: ((error) => console.log("Supabase Favo Insterted Error: ", error))
+    })
+    //     Call addNft with these args:
+    //   "objects": {
+    //     "id": null,
+    //     "user_id": null,
+    //     "mainnet": null
+    //   }
+    return [addFavo, { data }]
+}
+
+
+function deleteFavoHelper(data, setFavo) {
+    console.log("data", data)
+    setFavo((prev) => {
+        return prev.filter((element) => { return element !== data.deleteFromFavoriteCollection.records[0]?.id })
+    })
+    console.log("Supabase Delete Favo: ", data)
+}
+
+export function supabaseDeleteFavo(setFavo) {
+    const [delFavo, { data }] = useMutation(
+        DeleteFavo, {
+        client: supabaseClient,
+        onCompleted: ((data) => deleteFavoHelper(data, setFavo)),
+        onError: ((error) => console.log("Supabase Favo Deleted Error: ", error))
+    })
+    //     Call addNft with these args: {
+    //   "filter": {
+    //     "id": {
+    //       "eq": null
+    //     }
+    //   }
+    // }
+    return [delFavo, { data }]
 }

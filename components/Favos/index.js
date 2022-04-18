@@ -5,17 +5,18 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import { GET_FAVOS, GET_ALL_STORES } from '../../utils/mintbaseQueries'
 import { PostGrid } from "../Post/postGrid";
 import { useUser } from "../../hooks/authUser";
+import { supabase } from "../../utils/initSupabase";
 
 
 
-const Favos = ({ mintbaseNetwork }) => {
+const Favos = ({ mintbaseNetwork, favo }) => {
 
     const { user } = useUser();
 
     // Filter the duplicate tokens
     function filterDups(arr) {
         let uniqueThingIds = [];
-        const uniqueArr = arr.token?.filter((nft) => {
+        const uniqueArr = arr.token.filter((nft) => {
             if (nft.thing) {
                 if (!uniqueThingIds.includes(nft.thing.id)) {
                     uniqueThingIds.push(nft.thing.id);
@@ -28,12 +29,14 @@ const Favos = ({ mintbaseNetwork }) => {
 
     // TODO make a new query!
     const [unique, setUnique] = useState()
+    console.log("FAVO FEED: ", favo[0].toString())
+
     const { loading, error, data } = useQuery(GET_FAVOS, {
         client: mintbaseNetwork.client,
         variables: {
             "where": {
                 "thingId": {
-                    "_in": ["SnhecOqJGXbDz5vuvr6p-TES6AWMNtfsokDSzmBWetM:voiceoftheoceans.mintbase1.near", "ZQRxncZRoJC1i0cC1XsOA3BxOoW2bH7BJNVbcwZHTzg:nftlysea.mintbase1.near", "l0TLdWR1c6FP1B_5RFNfirfptuF-quNX-lwcGVlXoQTQ:theflat.mintbase1.near", "t4NGg36Vqj3MzVXQayZ8fCuDtX_EGPU1vNIEhMYc7D0:xtalola.mintspace2.testnet"]
+                    "_in": favo[0],
                 }
             },
             "orderBy": [
@@ -46,8 +49,10 @@ const Favos = ({ mintbaseNetwork }) => {
     });
 
     useEffect(() => {
+
         if (error) { console.log(`Error! ${error.message}`) }
-        if (!loading) {
+        if (!loading && data) {
+            console.log(data)
             setUnique(filterDups(data))
         }
     }, [data, error, loading])
@@ -58,6 +63,7 @@ const Favos = ({ mintbaseNetwork }) => {
                 mintbaseNetwork={mintbaseNetwork}
                 loading={loading}
                 unique={unique}
+                favo={favo}
             />
         </Box>
     );

@@ -7,7 +7,7 @@ import { PostGrid } from "../Post/postGrid";
 
 
 
-const Feed = ({ mintbaseNetwork }) => {
+const Feed = ({ mintbaseNetwork, favo}) => {
 
 
     // Filter the duplicate tokens
@@ -72,6 +72,7 @@ const Feed = ({ mintbaseNetwork }) => {
             mintbaseNetwork={mintbaseNetwork}
             loading={loading}
             unique={unique}
+            favo={favo}
             />
             {!loading &&
                 <Box

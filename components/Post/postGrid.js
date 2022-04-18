@@ -18,7 +18,7 @@ const LazyPosts = dynamic(() => import("../Post/post"), {
 });
 
 
-export const PostGrid = ({loading, unique, mintbaseNetwork}) => {
+export const PostGrid = ({loading, unique, mintbaseNetwork, favo}) => {
 
 
 
@@ -39,6 +39,7 @@ export const PostGrid = ({loading, unique, mintbaseNetwork}) => {
                                     mintbaseNetwork={mintbaseNetwork}
                                     key={nft.thing.id}
                                     nft={nft}
+                                    favo={favo}
                                 />
                             </div>
                         )

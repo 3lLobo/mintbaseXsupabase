@@ -61,7 +61,7 @@ const CommentAuthor = ({ comment }) => {
         async function getAuthor() {
             const { error, data } = await supabase.from('users').select('full_name').eq('id', comment.user_id)
             // console.log(data)
-            if (data.length > 0) {
+            if (data?.length > 0) {
                 setAuthor(data[0].full_name)
             }
         }
