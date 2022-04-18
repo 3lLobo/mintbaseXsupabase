@@ -1,19 +1,30 @@
 import Header from '../components/Header'
 import Head from '../components/Head'
 import Feed from '../components/Feed'
+import Favos from '../components/Favos'
 import { Text, Box, Center, Image, Heading, HStack, Button, useColorModeValue, Show, Hide, Link } from '@chakra-ui/react'
 import { useUser } from '../hooks/authUser'
 import { graphqlSync } from 'graphql'
-import { useState, useReducer } from 'react'
+import { useState, useEffect, useReducer } from 'react'
 import { createApolloClient } from '../utils/initApolloMintbase'
+import { supabase } from '../utils/initSupabase'
 
 
+const OpenTab = ({openFeed, mintbaseNetwork, favo}) => {
+
+  return (
+    <Box>
+      {openFeed 
+      ? <Feed mintbaseNetwork={mintbaseNetwork} favo={favo} /> 
+      : <Favos mintbaseNetwork={mintbaseNetwork} favo={favo} />}
+    </Box>
+  )
+} 
 
 
 const Index = () => {
 
-  const user = useUser();
-  // console.log("User", user.user)
+  const {user} = useUser();
   const bg = useColorModeValue("white", "#030406");
 
   function networkReducer(mintbaseNetwork, action) {
@@ -28,16 +39,33 @@ const Index = () => {
     } else { throw new Error(); }
   }
 
-  const [mintbaseNetwork, setMintbaseNetwork] = useReducer(networkReducer, {client: createApolloClient("testnet"), network: "testnet"});
+  const [mintbaseNetwork, setMintbaseNetwork] = useReducer(networkReducer, { client: createApolloClient("testnet"), network: "testnet" });
+  const [openFeed, setOpenFeed] = useState(true)
+  const favo = useState([])
+
+  // Get Favorite Id list for user.
+  useEffect(() => {
+      async function getFavos() {
+          const { error, data } = await supabase.from('Favorite').select('id')
+                                                  .eq('user_id', user.id)
+                                                  .eq('mainnet', (mintbaseNetwork.network === 'mainnet'))
+          if (data?.length > 0) {
+              favo[1](data.map((element) => { return element.id}))
+          }
+      }
+      getFavos();
+      console.log("Favo: ",favo)
+  }, [user.id, mintbaseNetwork])
+
 
   return (
     <Box>
       <Head />
-      <Header mintbaseNetwork={mintbaseNetwork} setMintbaseNetwork={setMintbaseNetwork} />
+      <Header mintbaseNetwork={mintbaseNetwork} setMintbaseNetwork={setMintbaseNetwork} openFeed={openFeed} setOpenFeed={setOpenFeed} />
       <main>
-        {user.user
+        {user
         // {true
-          ? <Feed mintbaseNetwork={mintbaseNetwork} />
+          ? <OpenTab openFeed={openFeed} mintbaseNetwork={mintbaseNetwork} favo={favo} />
           :
           <HStack bg={bg}>
             <Hide below='md'>

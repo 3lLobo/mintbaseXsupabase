@@ -32,19 +32,22 @@ import {
     supabaseInsertComment,
     supabaseDeleteComment,
     supabaseDeleteLike,
-    supabaseUpdateLike
+    supabaseUpdateLike,
+    supabaseInsertFavo,
+    supabaseDeleteFavo
 } from "../../utils/supabaseFncs";
 import { mintbaseNetwork } from '../../utils/initApolloMintbase'
 import { useUser } from "../../hooks/authUser";
 import { SpinnerContainer } from "../Spinner";
 import { InteractionBar } from "./Footer/interactionBar";
 import { CommentSection } from "./Footer/commentSection";
-import { GiCrownedHeart } from "react-icons/gi"
+import { BsBookmarkHeartFill } from "react-icons/bs"
 
 
-const Post = ({ nft, mintbaseNetwork }) => {
+const Post = ({ nft, mintbaseNetwork, favo }) => {
+
     const postBg = useColorModeValue("#fafafa", "lightblack");
-    const user = useUser()
+    const { user } = useUser()
     const [nftData, setNftData] = useState()
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -53,34 +56,73 @@ const Post = ({ nft, mintbaseNetwork }) => {
     // Get comments and likes from supabase
     const [nftComments, setNftComments] = useState([])
     const [nftLikes, setNftLikes] = useState([])
-    // const [nftDislikes, setNftDislikes] = useState([])
     const [userLike, setUserLike] = useState()
     const [userComment, setUserComment] = useState("")
+    const [userFavo, setUserFavo] = favo;
+    const [addFavo, { data: addFavoData }] = supabaseInsertFavo(setUserFavo)
+    const [delFavo, { data: delFavoData }] = supabaseDeleteFavo(setUserFavo)
+    const [isFavo, setIsFavo] = useState()
 
-    // const [ownLike, setOwnLike] = useState()
+    // Chack if nft is in users favos
+    useEffect(() => {
+        if (userFavo.includes(nft.thing.id)) {
+            setIsFavo(() => true)
+        } else {
+            setIsFavo(() => false)
+        }
+    }, [nft.thing.id, userFavo])
+
+    console.log("is Favo? ", isFavo)
+    //  Click on the favorite button
+    async function onFavo(event) {
+        await isSupaNft()
+        console.log("UserFavo: ", userFavo)
+        if (isFavo) {
+            await delFavo({
+                variables: {
+                    "filter": {
+                        "id": {
+                            "eq": nft.thing.id
+                        },
+                        "user_id": {
+                            "eq": user.id
+                        }
+                    }
+                }
+            })
+            console.log("Deleted Favo: ", userFavo)
+        } else {
+            await addFavo({
+                variables: {
+                    "objects": [{
+                        "id": nft.thing.id,
+                        "user_id": user.id,
+                        "mainnet": (mintbaseNetwork === 'mainnet'),
+                    }]
+                }
+            })
+            console.log("Insterted Favo: ", userFavo)
+        }
+    }
+
+
     useEffect(() => {
         if (!nftDataLoading) {
-            // console.log("NFTData: ", nftData.nftCollection.edges[0])
             if (data.nftCollection.edges.length > 0) {
                 const supabaseData = data.nftCollection.edges[0].node;
-                console.log(supabaseData)
                 setNftData(supabaseData)
                 const supaComments = supabaseData.commentCollection.edges;
-                console.log("Com", supaComments)
                 const supaLikes = supabaseData.likeCollection.edges
-                console.log("Likes", supaLikes)
                 if (supaComments.length > 0) { setNftComments(() => supaComments.map((edge) => { return edge.node })) }
                 if (supaLikes.length > 0) { setNftLikes(() => supaLikes.map((edge) => { return edge.node })) }
 
-                const like = supaLikes.filter((like) => like.node.user_id === user.user.id);
+                const like = supaLikes.filter((like) => like.node.user_id === user.id);
                 if (like.length > 0) {
                     setUserLike(like[0].node)
-                    // console.log("User has like!", like)
                 }
             }
         }
     }, [data, nftDataLoading])
-    // console.log(nftLikes)
 
     // All the supabase hooks.
     const [addNft, { data: addNftData }] = supabaseInsertNft()
@@ -100,7 +142,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
                     "objects": [{
                         "text": userComment,
                         "nft_id": nft.thing.id,
-                        "user_id": user.user.id
+                        "user_id": user.id
                     }]
                 }
             })
@@ -138,7 +180,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
                                 "eq": nft.thing.id,
                             },
                             "user_id": {
-                                "eq": user.user.id
+                                "eq": user.id
                             },
                         }
                     }
@@ -152,7 +194,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
                                 "eq": nft.thing.id,
                             },
                             "user_id": {
-                                "eq": user.user.id
+                                "eq": user.id
                             },
                         }
                     }
@@ -164,7 +206,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
             await addLike({
                 variables: {
                     "objects": [{
-                        "user_id": user.user.id,
+                        "user_id": user.id,
                         "nft_id": nft.thing.id,
                         "value": like
                     }]
@@ -175,7 +217,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
 
     useEffect(() => {
         setNftLikes((prev) => {
-            let prevFilter = prev.filter((like) => like?.user_id !== user.user.id)
+            let prevFilter = prev.filter((like) => like?.user_id !== user.id)
             return [...prevFilter, userLike]
         })
     }, [userLike])
@@ -221,7 +263,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
                             >{nft.minter}
                             </Text>
                             <TimeAgo
-                                className={`text-[11px] font-light order-last p-3 opacity-50`}
+                                className="text-xs  text-neutral-400 text-right"
                                 datetime={nft.createdAt}
                             />
                         </Box >
@@ -254,17 +296,20 @@ const Post = ({ nft, mintbaseNetwork }) => {
                     </Box>
                 }
             </Box >
-            <EnlargedPost 
-            nft={nft} 
-            nftLikes={nftLikes} 
-            userLike={userLike} 
-            postBg={postBg} 
-            nftComments={nftComments} 
-            onLikeClick={onLikeClick} 
-            onComment={onComment} 
-            userComment={userComment}
-            setUserComment={setUserComment} 
-            state={[isOpen, onClose]} />
+            <EnlargedPost
+                nft={nft}
+                nftLikes={nftLikes}
+                userLike={userLike}
+                postBg={postBg}
+                nftComments={nftComments}
+                onLikeClick={onLikeClick}
+                onComment={onComment}
+                userComment={userComment}
+                setUserComment={setUserComment}
+                onFavo={onFavo}
+                isFavo={isFavo}
+                state={[isOpen, onClose]}
+            />
         </>
     );
 };
@@ -272,7 +317,7 @@ const Post = ({ nft, mintbaseNetwork }) => {
 
 //Modal which opens on clicking over a post 
 
-const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComment, userComment, setUserComment, userLike, state }) => {
+const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComment, userComment, setUserComment, userLike, state, onFavo, isFavo }) => {
     const [isOpen, onClose] = state;
 
     return (
@@ -280,10 +325,11 @@ const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComme
             isOpen={isOpen}
             size={"5xl"}
             onClose={onClose}
-        >
+            >
             <ModalOverlay
             />
             <ModalContent
+                bg={postBg}
             >
                 <ModalHeader>
                     <Box
@@ -305,18 +351,33 @@ const EnlargedPost = ({ nft, postBg, nftLikes, nftComments, onLikeClick, onComme
                             my={2}
                         >{nft.minter}
                         </Text>
+                        {/* <BsBookmarkHeartFill
+                        // size="sm"
+                            className={"mr-auto " + (isFavo ? "fill-red-500 " : "fill-green-500 ")}
+                        // className='bg-red-500'
+                        // color='#666666'
+                        /> */}
+                        <Box
+                            // variant={"ghost"}
+                            // size="lg"
+                            // colorScheme={isFavo ? "red" : "gray"}
+                            // colorScheme="red"
+                            className="mr-auto w-9 mr-3 cursor-pointer"
+                            // icon={ }
+                            isRound
+                            onClick={onFavo}
+                        >
+                                <BsBookmarkHeartFill
+                                size="lg"
+                                className={" " + (isFavo ? "fill-red-600" : "")} 
+                                // className='bg-red-500'
+                                // color='#666666'
+                                /> 
+                        </Box>
                         <TimeAgo
-                            className={`text-[11px] font-light p-3 opacity-50`}
+                            className="text-xs  text-neutral-400 mr-6 text-right"
                             datetime={nft.createdAt}
                         />
-                        <IconButton
-                            variant={"ghost"}
-                            className="ml-auto h-6 mr-3"
-                            icon={<GiCrownedHeart className="fill-red-500" />}
-                            isRound
-                        // onClick={}
-                        >
-                        </IconButton>
                     </Box >
                 </ModalHeader>
                 <ModalCloseButton />

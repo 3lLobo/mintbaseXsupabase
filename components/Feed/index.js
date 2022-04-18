@@ -1,36 +1,13 @@
 import { Box, Button, Center } from "@chakra-ui/react";
-import dynamic from "next/dynamic";
 import { useQuery, gql } from '@apollo/client';
 import { createApolloClient } from "../../utils/initApolloMintbase";
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { GET_LATEST_NFTS, GET_ALL_STORES } from '../../utils/mintbaseQueries'
+import { PostGrid } from "../Post/postGrid";
 
 
-export const SpinnerContainer = () => {
-    return (
-        <Button
-            isLoading
-            colorScheme='gray'
-        >
-        </Button>
-    )
-}
 
-// important ! reduce load time. lazyLoad feeder during fetch
-const LazyPosts = dynamic(() => import("../Post/post"), {
-    loading: () => (
-        <Button
-            isLoading
-            variant="ghost"
-            position="absolute"
-            left="50vw"
-            top="50vh"
-            disabled
-        />
-    ),
-});
-
-const Feed = ({ mintbaseNetwork }) => {
+const Feed = ({ mintbaseNetwork, favo}) => {
 
 
     // Filter the duplicate tokens
@@ -91,29 +68,12 @@ const Feed = ({ mintbaseNetwork }) => {
 
     return (
         <Box>
-            <Box
-                className="p-4 relative sm:px-10 "
-            >
-                <Box
-                    gap="20px"
-                    className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 "
-                >
-                    {loading
-                        ? <SpinnerContainer />
-                        : unique?.map((nft) => {
-                            return (
-                                <div maxW={500} colSpan={1} className="flex flex-col hover:drop-shadow-lg">
-                                    <LazyPosts
-                                        mintbaseNetwork={mintbaseNetwork}
-                                        key={nft.thing.id}
-                                        nft={nft}
-                                    />
-                                </div>
-                            )
-                        })
-                    }
-                </Box>
-            </Box>
+            <PostGrid 
+            mintbaseNetwork={mintbaseNetwork}
+            loading={loading}
+            unique={unique}
+            favo={favo}
+            />
             {!loading &&
                 <Box
                     className="relative flex mb-11 drop-shadow-lg"

@@ -67,3 +67,30 @@ mutation Mutation($filter: LikeFilter) {
   }
 }
 `
+
+export const InsertFavo = gql`
+mutation Mutation($objects: [FavoriteInsertInput!]!) {
+  insertIntoFavoriteCollection(objects: $objects) {
+    affectedCount
+    records {
+      id
+      created_at
+      user_id
+      mainnet
+      nft {
+        mintbase_thing_id
+      }
+    }
+  }
+}
+`
+
+export const DeleteFavo = gql`
+mutation DeleteFromFavoriteCollection($filter: FavoriteFilter) {
+  deleteFromFavoriteCollection(filter: $filter) {
+    records {
+      id
+    }
+  }
+}
+`
