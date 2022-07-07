@@ -25,7 +25,7 @@ import { loginUser, reset } from '../app/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
 
 
-
+// .env from here https://github.com/unstoppabledomains/uauth/blob/main/examples/nextjs/.env
 const uauth = new UAuth({
     clientID: process.env.NEXT_PUBLIC_CLIENT_ID,
     scope: 'openid email wallet',
