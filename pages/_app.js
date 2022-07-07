@@ -5,6 +5,9 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
 import { ApolloProvider } from '@apollo/client'
 import { createApolloClient } from '../utils/initApolloMintbase'
+import { store } from '../app/store'
+import { Provider } from 'react-redux'
+
 
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
@@ -37,9 +40,9 @@ export default function MyApp({ Component, pageProps }) {
             <UserContextProvider>
                 {/* <ApolloProvider client={mintbaseClient}> */}
                 <ChakraProvider theme={brand}>
-                    {/* <ThemeProvider attribute="class"> */}
-                    <Component {...pageProps} />
-                    {/* </ThemeProvider> */}
+                    <Provider store={store}>
+                        <Component {...pageProps} />
+                    </Provider>
                 </ChakraProvider>
                 {/* </ApolloProvider> */}
             </UserContextProvider>

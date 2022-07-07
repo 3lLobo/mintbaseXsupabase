@@ -9,9 +9,11 @@ import { SignOut, useUser } from '../../hooks/authUser'
 import ToggleMode from './toggle-mode'
 import { Box, Text, DarkMode, Button, VStack } from '@chakra-ui/react'
 import { ToggleNetwork } from './toggleNetwork'
+import { useSelector, useDispatch } from 'react-redux'
 
-export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, setOpenFeed }) {
-    const { user } = useUser()
+export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, setOpenFeed, handleLogout, handleLogin }) {
+    const store = useSelector((state) => state.user)
+
     return (
         <Disclosure as="nav" className="bg-neutral-900 shadow-2xl z-10 opacity-100 sticky top-0 ">
             {({ open }) => (
@@ -82,7 +84,7 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, 
                             <Box className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                 {/** notifications */}
 
-                                {AuthUser() ? <MenuLogado user={user} /> : <MenuNotLogado />}
+                                {store.user.loggedIn ? <MenuLogado user={store.user} handleLogout={handleLogout} /> : <MenuNotLogado handleLogin={handleLogin}/>}
                                 <ToggleMode />
                             </Box>
                         </Box>

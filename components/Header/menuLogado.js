@@ -3,22 +3,25 @@ import { Menu, Transition } from '@headlessui/react'
 import { UserCircleIcon } from '@heroicons/react/outline'
 import classNames from '../../utils/classsesNames'
 import { SignOut } from '../../hooks/authUser'
-import { Box, Text, DarkMode } from '@chakra-ui/react'
+import { Box, Text, DarkMode, Avatar } from '@chakra-ui/react'
 import { supabase } from '../../utils/initSupabase'
+import { useSelector, useDispatch } from 'react-redux'
 
-const MenuLogado = ({ user }) => {
-    // console.log("USER : ", user)
+const MenuLogado = ({ user, handleLogout }) => {
+
+    // const store = useSelector((state) => state.user)
+    // const user = store.user
 
     useEffect(() => {
         async function updateUsername() {
             // console.log("Upadte User name: ", user.user_metadata.full_name)
             const { data, error } = await supabase
                 .from('users')
-                .update({ full_name: user.user_metadata.full_name })
+                .update({ full_name: user.user_metadata?.full_name })
                 .eq('id', user.id)
 
             if (error) {
-                console.log('SUpaError: ', error)
+                console.log('SupaError: ', error)
             }
         }
 
@@ -38,7 +41,16 @@ const MenuLogado = ({ user }) => {
                             </Text>
                             <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                                 <span className="sr-only">Open user menu</span>
-                                <UserCircleIcon className="h-8 w-8 text-white" />
+                                {user.avatar ?
+                                    <Avatar
+                                        h={8}
+                                        w={8}
+                                        src={user.avatar}
+                                        borderColor='slateblue'
+                                        showBorder={true}
+                                    />
+                                    : <UserCircleIcon className="h-8 w-8 text-white" />
+                            }
                             </Menu.Button>
                         </DarkMode>
                     </Box>
@@ -91,7 +103,7 @@ const MenuLogado = ({ user }) => {
                                             'block px-4 py-2 text-sm text-gray-700'
                                         )}
                                     >
-                                        <button onClick={() => SignOut()}>Sign out</button>
+                                        <button onClick={handleLogout}>Sign out</button>
                                     </a>
                                 )}
                             </Menu.Item>

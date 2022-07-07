@@ -5,10 +5,15 @@ import { Auth, Card, Typography, Space } from '@supabase/ui'
 import Head from '../components/Head'
 import Header from '../components/Header'
 import { Box } from '@chakra-ui/react'
+import { useSelector, useDispatch } from 'react-redux'
+
+
 
 const AuthPage = () => {
-    AuthRedirect()
+    const store = useSelector((state) => state.theme)
+    const dispatch = useDispatch()
 
+    
     return (
         <>
             <Head />
