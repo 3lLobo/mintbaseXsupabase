@@ -91,6 +91,7 @@ const AuthPage = () => {
             <Box
                 w='2xl'
                 mx={'auto'}
+                my={'auto'}
             >
                 <Card>
                     <Space direction="vertical" size={11}>
@@ -101,15 +102,15 @@ const AuthPage = () => {
                             w='xl'
                         >
                             <button
-                                onTouchStart={() => setSvgSrc('/unstopSvgButtons/hover-large.svg')}
-                                onTouchEnd={() => setSvgSrc('/unstopSvgButtons/default-large.svg')}
+                                onMouseEnter={() => setSvgSrc('/unstopSvgButtons/hover-large.svg')}
+                                onMouseLeave={() => setSvgSrc('/unstopSvgButtons/default-large.svg')}
                                 onClick={handleLogin}
                                 className='mx-auto flex flex-grow'
                             >
                                 <Image
                                     src={svgSrc}
                                     // layout="fill"
-                                    width='666'
+                                    width='555'
                                     height='100%'
                                 />
                             </button>
@@ -120,6 +121,7 @@ const AuthPage = () => {
                             view={'sign_in'}
                             socialLayout="horizontal"
                             socialButtonSize="xlarge"
+                            onlyThirdPartyProviders={true}
                         />
                     </Space>
                 </Card>
