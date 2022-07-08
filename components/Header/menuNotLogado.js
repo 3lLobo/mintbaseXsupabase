@@ -1,15 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
 
-const MenuNotLogado = ({ handleLogin }) => (
+const MenuNotLogado = () => (
     <div className="flex space-x-4">
-        <button
-            onClick={handleLogin}
-        >
+        <Link href="/auth">
             <a className="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
                 Log In
             </a>
-        </button>
+        </Link>
     </div>
 )
 

@@ -36,7 +36,7 @@ const brand = extendTheme({
 
 export default function MyApp({ Component, pageProps }) {
     return (
-        <main className={'dark'}>
+        <main>
             <UserContextProvider>
                 {/* <ApolloProvider client={mintbaseClient}> */}
                 <ChakraProvider theme={brand}>

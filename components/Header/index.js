@@ -9,10 +9,10 @@ import { SignOut, useUser } from '../../hooks/authUser'
 import ToggleMode from './toggle-mode'
 import { Box, Text, DarkMode, Button, VStack } from '@chakra-ui/react'
 import { ToggleNetwork } from './toggleNetwork'
-import { useSelector, useDispatch } from 'react-redux'
 
-export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, setOpenFeed, handleLogout, handleLogin }) {
-    const store = useSelector((state) => state.user)
+
+export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, setOpenFeed, handleLogout }) {
+    const {user} = useUser();
 
     return (
         <Disclosure as="nav" className="bg-neutral-900 shadow-2xl z-10 opacity-100 sticky top-0 ">
@@ -39,52 +39,57 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, 
                                         alt="supabase"
                                     />
                                 </Box>
-                                <Box className="hidden sm:block sm:ml-6">
-                                    <DarkMode>
-                                        <Box className="flex space-x-4">
-                                            <Button
-                                                key="feed"
-                                                isActive={openFeed}
-                                                onClick={() => setOpenFeed(true)}
-                                                className={
-                                                    openFeed
-                                                        ? 'bg-gray-900 text-white'
-                                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
-                                                }
-                                                aria-current={openFeed ? 'page' : undefined}
-                                            >
-                                                NFT Feed
-                                            </Button>
-                                            <Button
-                                                key="favos"
-                                                isActive={!openFeed}
-                                                onClick={() => setOpenFeed(false)}
-                                                className={
-                                                    !openFeed
-                                                        ? 'bg-gray-900 text-white'
-                                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
-                                                }
-                                                aria-current={!openFeed ? 'page' : undefined}
-                                            >
-                                                NFT Favos
-                                            </Button>
-                                            <ToggleNetwork
-                                                network={mintbaseNetwork}
-                                                setNetwork={setMintbaseNetwork}
-                                            />
-                                            <Box>
-                                                <Text className="mt-2 text-slate-100">
-                                                    {mintbaseNetwork.network}
-                                                </Text>
+                                {(user) &&
+                                    <Box className="hidden sm:block sm:ml-6">
+                                        <DarkMode>
+                                            <Box className="flex space-x-4">
+                                                <Button
+                                                    key="feed"
+                                                    isActive={openFeed}
+                                                    onClick={() => setOpenFeed(true)}
+                                                    className={
+                                                        openFeed
+                                                            ? 'bg-gray-900 text-white'
+                                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
+                                                    }
+                                                    aria-current={openFeed ? 'page' : undefined}
+                                                >
+                                                    NFT Feed
+                                                </Button>
+                                                <Button
+                                                    key="favos"
+                                                    isActive={!openFeed}
+                                                    onClick={() => setOpenFeed(false)}
+                                                    className={
+                                                        !openFeed
+                                                            ? 'bg-gray-900 text-white'
+                                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white font-light'
+                                                    }
+                                                    aria-current={!openFeed ? 'page' : undefined}
+                                                >
+                                                    NFT Favos
+                                                </Button>
+                                                <ToggleNetwork
+                                                    network={mintbaseNetwork}
+                                                    setNetwork={setMintbaseNetwork}
+                                                />
+                                                <Box>
+                                                    <Text className="mt-2 text-slate-100">
+                                                        {mintbaseNetwork.network}
+                                                    </Text>
+                                                </Box>
                                             </Box>
-                                        </Box>
-                                    </DarkMode>
-                                </Box>
+                                        </DarkMode>
+                                    </Box>
+                                }
                             </Box>
                             <Box className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                 {/** notifications */}
 
-                                {store.user.loggedIn ? <MenuLogado user={store.user} handleLogout={handleLogout} /> : <MenuNotLogado handleLogin={handleLogin}/>}
+                                {(user)
+                                    ? <MenuLogado user={user} handleLogout={handleLogout} />
+                                    : <MenuNotLogado />
+                                }
                                 <ToggleMode />
                             </Box>
                         </Box>

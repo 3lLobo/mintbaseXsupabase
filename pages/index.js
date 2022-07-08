@@ -45,6 +45,7 @@ const OpenTab = ({ openFeed, mintbaseNetwork, favo }) => {
 }
 
 const Index = () => {
+    const {user} = useUser();
     const store = useSelector((state) => state.user)
     const dispatch = useDispatch()
 
@@ -64,30 +65,19 @@ const Index = () => {
         }
     }
 
-    // Login with a popup and save the user
-    const handleLogin = () => {
-        // setLoading(true)
-        if (!uauth) {
-            return
-        }
-        uauth
-            .loginWithPopup()
-            .then(() => uauth.user()) // .then((value) => dispatch(setUser({user: value}))))
-            .catch((error) => console.log(error))
-            .finally((value) => dispatch(loginUser({id: value || '🐈‍⬛'})))
-    }
     // Logout and delete user
-    const handleLogout = () => {
+    const handleLogout = async () => {
         if (!uauth) {
             COnsole.log('🐈‍⬛ cannot log out!')
             return
         }
         console.log('🐈‍⬛ logging out...')
-        uauth
+        await (uauth
             .logout()
-            // .then(() => setUser(undefined))
+            // .then(() => )
             .catch((error) => console.log(error))
-            .finally(() => dispatch(reset()))
+            .finally(() => dispatch(reset())))
+        await (supabase.auth.signOut())
     }
 
     const [mintbaseNetwork, setMintbaseNetwork] = useReducer(networkReducer, {
@@ -103,7 +93,7 @@ const Index = () => {
             const { error, data } = await supabase
                 .from('Favorite')
                 .select('id')
-                .eq('user_id', store.user.id)
+                .eq('user_id', user.id)
                 .eq('mainnet', mintbaseNetwork.network === 'mainnet')
             if (data?.length > 0) {
                 favo[1](
@@ -115,7 +105,7 @@ const Index = () => {
         }
         getFavos()
         console.log('Favo: ', favo)
-    }, [store.user.id, mintbaseNetwork])
+    }, [user.id, mintbaseNetwork])
 
     return (
         <Box>
@@ -126,10 +116,9 @@ const Index = () => {
                 openFeed={openFeed}
                 setOpenFeed={setOpenFeed}
                 handleLogout={handleLogout}
-                handleLogin={handleLogin}
             />
             <main>
-                {store.user.loggedIn ? (
+                { (user) ? (
                     // {true
                     <OpenTab openFeed={openFeed} mintbaseNetwork={mintbaseNetwork} favo={favo} />
                 ) : (
@@ -155,12 +144,12 @@ const Index = () => {
                                 Dopest NFTs from Mintbase. Collect, Like & Share now!
                             </Text>
                             <Center>
-                                {/* <Link href="/auth"> */}
-                                    <Button p={5} size={'lg'} color={'blue.100'} bg={'gray.700'} onClick={handleLogin}>
+                                <Link href="/auth">
+                                    <Button p={5} size={'lg'} color={'blue.100'} bg={'gray.700'}>
                                         {' '}
                                         Login{' '}
                                     </Button>
-                                {/* </Link> */}
+                                </Link>
                             </Center>
                         </Box>
                     </HStack>

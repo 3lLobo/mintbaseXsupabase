@@ -34,23 +34,23 @@ const MenuLogado = ({ user, handleLogout }) => {
         <Menu as="div" className="ml-3 relative">
             {({ open }) => (
                 <Box>
-                    <Box className="flex">
+                    <Box className="flex flex-row w-40">
                         <DarkMode>
-                            <Text className="mr-3 mt-0.5 color-white text-slate-50 decoration-4">
-                                {user.user_metadata.full_name || 'AngryPanda'}
+                            <Text className="mr-3 my-auto color-white text-slate-50 decoration-4 truncate text-xs">
+                                {user.user_metadata.full_name || window?.ethereum?.selectedAddress || 'AngryPanda'}
                             </Text>
                             <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                                 <span className="sr-only">Open user menu</span>
-                                {user.avatar ?
+                                {!user.avatar ?
                                     <Avatar
                                         h={8}
                                         w={8}
-                                        src={user.avatar}
+                                        src='https://i.etsystatic.com/21689229/r/il/bce321/2406492170/il_570xN.2406492170_dgxu.jpg'
                                         borderColor='slateblue'
                                         showBorder={true}
                                     />
                                     : <UserCircleIcon className="h-8 w-8 text-white" />
-                            }
+                                }
                             </Menu.Button>
                         </DarkMode>
                     </Box>
