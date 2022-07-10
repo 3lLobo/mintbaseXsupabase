@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { supabase } from '../utils/initSupabase'
 import { Auth, Card, Typography, Space } from '@supabase/ui'
 import Head from '../components/Head'
@@ -6,7 +6,6 @@ import { Box, Image } from '@chakra-ui/react'
 import UAuth from '@uauth/js'
 import { loginUser, reset } from '../app/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
-import Header from '../components/Header'
 import { ethers } from 'ethers'
 import { AuthRedirect } from '../hooks/authUser'
 
@@ -15,13 +14,17 @@ import { AuthRedirect } from '../hooks/authUser'
 const uauth = new UAuth({
     clientID: "eb6179b7-3b34-4299-9a13-5e11d85ca74a",
     // clientID: process.env.NEXT_PUBLIC_CLIENT_ID,
-    redirectUri: "https://nftea-base.netlify.app/",
+    redirectUri: "https://nftea-base.netlify.app/auth",
     scope: 'openid email wallet',
 })
 
 const AuthPage = () => {
     AuthRedirect()
     const [svgSrc, setSvgSrc] = React.useState('/unstopSvgButtons/default-large.svg')
+
+    useEffect(() => {
+        document?.documentElement.classList.add('dark')
+    })
 
     // Login with a popup and save the user
     const handleLogin = async () => {
@@ -87,43 +90,43 @@ const AuthPage = () => {
 
     return (
         <div
-            className='h-screen w-screen flex flex-col'
+        // className='h-screen w-screen flex flex-col'
         >
             <Head />
             <Box
-                w='2xl'
-                mx={'auto'}
-                my={'auto'}
+                className="authcontainer"
+            // w='2xl'
+            // mx={'auto'}
+            // my={'auto'}
             >
                 <Card>
-                    <Space direction="vertical" size={11}>
+                    <Space direction="vertical" size={8}>
                         <Box>
                             <Typography.Title level={3}>Welcome</Typography.Title>
                         </Box>
-                        <Box
-                            w='xl'
-                        >
-                            <button
-                                onMouseEnter={() => setSvgSrc('/unstopSvgButtons/hover-large.svg')}
-                                onMouseLeave={() => setSvgSrc('/unstopSvgButtons/default-large.svg')}
-                                onClick={handleLogin}
-                                className='mx-auto flex flex-grow'
-                            >
-                                <Image
-                                    src={svgSrc}
-                                    // layout="fill"
-                                    // height='100%'
-                                />
-                            </button>
-                        </Box>
                         <Auth
                             supabaseClient={supabase}
-                            providers={['google']}
+                            providers={['google',]}
                             view={'sign_in'}
                             socialLayout="horizontal"
                             socialButtonSize="xlarge"
                             onlyThirdPartyProviders={true}
                         />
+                        <Box
+                        >
+                            <button
+                                onMouseEnter={() => setSvgSrc('/unstopSvgButtons/hover-large.svg')}
+                                onMouseLeave={() => setSvgSrc('/unstopSvgButtons/default-large.svg')}
+                                onClick={handleLogin}
+                                className='mx-auto'
+                            >
+                                <Image
+                                    src={svgSrc}
+                                // layout="fill"
+                                // height='100%'
+                                />
+                            </button>
+                        </Box>
                     </Space>
                 </Card>
             </Box>
