@@ -39,21 +39,27 @@ const AuthPage = () => {
         )
         // dispatch(loginUser({ id: user_id }))
 
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+        const eth_addresses = (await provider.send("eth_requestAccounts", []))
+        const signer = provider.getSigner()
+        console.log("🚀 ~ file: auth.js ~ line 45 ~ handleLogin ~ signer", signer)
 
-        if (window?.ethereum?.selectedAddress) {
-            const evm_address = window.ethereum.selectedAddress
-            const sign_msg = ethers.utils.hashMessage("AngryPanda")
-            const pswd = await (ethereum
-                .request({ "jsonrpc": "2.0", "method": "eth_sign", "params": [evm_address, sign_msg], "id": 1 })
-                .then((res) => { return res })
-                .catch((error) => {
-                    console.error(error);
-                    return {}
-                })
-            )
+        if (eth_addresses.length > 0) {
+            const evm_address = eth_addresses[0]
+            const msg = "AngryPandaPassword"
+            const signature = (await signer.signMessage(msg))
+            // const sign_msg = ethers.utils.hashMessage(msg)
+            // const pswd = await (ethereum
+            //     .request({ "jsonrpc": "2.0", "method": "eth_sign", "params": [evm_address, sign_msg], "id": 1 })
+            //     .then((res) => { return res })
+            //     .catch((error) => {
+            //         console.error(error);
+            //         return {}
+            //     })
+            // )
+
             // check if user exists
-            console.log("🚀 ~ file: auth.js ~ line 60 ~ handleLogin ~ pswd", pswd)
-            if (pswd) {
+            if (signature) {
                 const evm_email = evm_address + '@angrypanda.nft'
                 const { data } = await supabase
                     .from('users')
@@ -61,22 +67,18 @@ const AuthPage = () => {
                     .eq('email', evm_email)
 
                 if (data.length > 0) {
+                    console.log("🚀 ~ file: auth.js ~ line 69 ~ handleLogin ~ data", data)
                     console.log("loggin in to Supabase.")
                     const { user, session, error } = await supabase.auth.signIn({
                         email: evm_email,
-                        password: pswd,
-                    },
-                        {
-                            data: {
-                                evm_address
-                            }
-                        })
+                        password: signature,
+                    })
                     console.log("🚀 ~ file: auth.js ~ line 67 ~ connectUauth ~ { user, session, error } ", { user, session, error })
                 } else {
                     console.log("creating user in Supabase.")
                     const { user, session, error } = await supabase.auth.signUp({
                         email: evm_email,
-                        password: pswd,
+                        password: signature,
                     })
                 }
             }
