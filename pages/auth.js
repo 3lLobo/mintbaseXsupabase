@@ -2,11 +2,10 @@ import React from 'react'
 import { supabase } from '../utils/initSupabase'
 import { Auth, Card, Typography, Space } from '@supabase/ui'
 import Head from '../components/Head'
-import { Box } from '@chakra-ui/react'
+import { Box, Image } from '@chakra-ui/react'
 import UAuth from '@uauth/js'
 import { loginUser, reset } from '../app/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
-import Image from 'next/image'
 import Header from '../components/Header'
 import { ethers } from 'ethers'
 import { AuthRedirect } from '../hooks/authUser'
@@ -14,7 +13,8 @@ import { AuthRedirect } from '../hooks/authUser'
 
 // .env from here https://github.com/unstoppabledomains/uauth/blob/main/examples/nextjs/.env
 const uauth = new UAuth({
-    clientID: process.env.NEXT_PUBLIC_CLIENT_ID,
+    clientID: "eb6179b7-3b34-4299-9a13-5e11d85ca74a",
+    // clientID: process.env.NEXT_PUBLIC_CLIENT_ID,
     scope: 'openid email wallet',
     // redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URI,
 })
@@ -112,8 +112,7 @@ const AuthPage = () => {
                                 <Image
                                     src={svgSrc}
                                     // layout="fill"
-                                    width='555'
-                                    height='100%'
+                                    // height='100%'
                                 />
                             </button>
                         </Box>
