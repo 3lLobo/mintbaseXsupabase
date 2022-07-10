@@ -18,7 +18,7 @@ The cherry of human interaction is verbal, thus let lose and Comment your unaske
 
 With the 'favorite' button you can save an NFT and find it back later on the 'Favorites' page.
 One click on the NFTs avatar will send you to the corresponding Mintbase Store, where you can even buy and be the new proud owner of your fav NFTs. No worries, we also have full understanding if you're broke and prefer to screenshot. Life is about living and letting live.
-This leads me to round up with this decription with a question to the Supabase hackathon organizers:
+This leads me to round up with this description with a question to the Supabase hackathon organizers:
 
 `Which trees are you planting for these project? My preference are Ombu trees.`
 

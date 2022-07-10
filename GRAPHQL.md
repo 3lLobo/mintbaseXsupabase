@@ -14,7 +14,7 @@
 ### Using multiple endpoints
 
 The `<ApolloProvider>` takes onw client and makes it available when calling the hooks.
-To use a second endpoint, define a seperate client and pass it as option argument to the hooks. See [docs]{https://www.apollographql.com/docs/react/api/react/hooks/#usequery}
+To use a second endpoint, define a separate client and pass it as option argument to the hooks. See [docs]{https://www.apollographql.com/docs/react/api/react/hooks/#usequery}
 
 ## SQL hacqs
 
