@@ -15,8 +15,8 @@ import { AuthRedirect } from '../hooks/authUser'
 const uauth = new UAuth({
     clientID: "eb6179b7-3b34-4299-9a13-5e11d85ca74a",
     // clientID: process.env.NEXT_PUBLIC_CLIENT_ID,
+    redirectUri: "https://nftea-base.netlify.app/",
     scope: 'openid email wallet',
-    // redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URI,
 })
 
 const AuthPage = () => {
