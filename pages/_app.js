@@ -1,10 +1,7 @@
 import React from 'react'
 import { UserContextProvider } from '../hooks/authUser'
-// import { ThemeProvider } from "next-themes";
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
-import { ApolloProvider } from '@apollo/client'
-import { createApolloClient } from '../utils/initApolloMintbase'
 import { store } from '../app/store'
 import { Provider } from 'react-redux'
 
@@ -31,20 +28,16 @@ const brand = extendTheme({
         white: '#e5e5e5',
     },
 })
-// const theme = (brand);
-// const mintbaseClient = createApolloClient("mainnet");
 
 export default function MyApp({ Component, pageProps }) {
     return (
         <main>
             <UserContextProvider>
-                {/* <ApolloProvider client={mintbaseClient}> */}
                 <ChakraProvider theme={brand}>
                     <Provider store={store}>
                         <Component {...pageProps} />
                     </Provider>
                 </ChakraProvider>
-                {/* </ApolloProvider> */}
             </UserContextProvider>
         </main>
     )

@@ -9,8 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 const MenuLogado = ({ user, handleLogout }) => {
 
-    // const store = useSelector((state) => state.user)
-    // const user = store.user
+    const store = useSelector((state) => state.user)
 
     useEffect(() => {
         async function updateUsername() {
@@ -30,7 +29,7 @@ const MenuLogado = ({ user, handleLogout }) => {
         }
     }, [user, supabase])
 
-    const user_name = user.user_metadata.full_name || user.email || window?.ethereum?.selectedAddress || 'AngryPanda'
+    const user_name = user.user_metadata.full_name || user.email || store.user.id || window?.ethereum?.selectedAddress || 'AngryPanda'
 
     return (
         <Menu as="div" className="ml-3 relative">
@@ -73,7 +72,7 @@ const MenuLogado = ({ user, handleLogout }) => {
                             static
                             className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                         >
-                            <Menu.Item>
+                            {/* <Menu.Item>
                                 {({ active }) => (
                                     <a
                                         // href="/profile"
@@ -98,7 +97,7 @@ const MenuLogado = ({ user, handleLogout }) => {
                                         Settings
                                     </a>
                                 )}
-                            </Menu.Item>
+                            </Menu.Item> */}
                             <Menu.Item>
                                 {({ active }) => (
                                     <a

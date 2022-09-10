@@ -1,9 +1,11 @@
 import { Box, Button, Center } from '@chakra-ui/react'
 import { useQuery, gql } from '@apollo/client'
 import { createApolloClient } from '../../utils/initApolloMintbase'
-import { useEffect, useReducer, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 import { GET_LATEST_NFTS, GET_ALL_STORES } from '../../utils/mintbaseQueries'
 import { PostGrid } from '../Post/postGrid'
+
+const LOAD_LIMIT = 11
 
 const Feed = ({ mintbaseNetwork, favo }) => {
     // Filter the duplicate tokens
@@ -24,21 +26,23 @@ const Feed = ({ mintbaseNetwork, favo }) => {
         switch (action) {
             case 'load more':
                 setScrollDown(true)
-                return { limit: load.limit + 36 }
+                return { limit: load.limit + LOAD_LIMIT }
             case 'load less':
                 setScrollDown(true)
-                if (load.limit - 36 < 1) {
+                if (load.limit - LOAD_LIMIT < 1) {
                     return { limit: 1 }
                 } else {
-                    return { limit: load.limit - 36 }
+                    return { limit: load.limit - LOAD_LIMIT }
                 }
         }
     }
     const endRef = useRef()
     const [scrollDown, setScrollDown] = useState(false)
-    const [load, setLoad] = useReducer(loadReducer, { limit: 36 })
+    const [load, setLoad] = useReducer(loadReducer, { limit: LOAD_LIMIT })
+    const [target, setTarget] = useState(LOAD_LIMIT)
+    const [loadMore, setLoadMore] = useState(true)
 
-    const [unique, setUnique] = useState()
+    const [unique, setUnique] = useState([])
     const { loading, error, data } = useQuery(GET_LATEST_NFTS, {
         client: mintbaseNetwork.client,
         variables: {
@@ -52,14 +56,35 @@ const Feed = ({ mintbaseNetwork, favo }) => {
         pollInterval: 900,
     })
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+        // Print Errors from gql query 
         if (error) {
             console.log(`Error! ${error.message}`)
         }
-        if (!loading) {
-            setUnique(filterDups(data))
-            if (scrollDown) {
-                endRef.current.scrollIntoView({ behavior: 'smooth', alignToTop: true })
+        // Handle new data
+        if (data && !loading) {
+            // Filter data
+            const uniqueData = filterDups(data)
+            const newUniqueLength = uniqueData.length
+
+            // Append new data 
+            if (newUniqueLength > unique.length) {
+                setUnique(() => uniqueData)
+
+                // Scroll down to last viewed item
+                if (scrollDown) {
+                    endRef.current.scrollIntoView({ behavior: 'smooth', alignToTop: true })
+                }
+            }
+            
+            // Check if enough data length meets taget, otherwise load more
+            console.log(`loading more nfts. target:${target}  vs Loaded:${newUniqueLength} `)
+            if ((newUniqueLength < target) && loadMore) {
+                setTimeout(() => {
+                    setLoad('load more')
+                }, 1000)
+            } else {
+                setLoadMore(() => false)
             }
         }
     }, [data, error, loading])
@@ -79,7 +104,11 @@ const Feed = ({ mintbaseNetwork, favo }) => {
                         variant="solid"
                         colorScheme="teal"
                         className="mx-auto font-bold"
-                        onClick={() => setLoad('load more')}
+                        onClick={() => {
+                            setLoad('load more')
+                            setLoadMore(() => true)
+                            setTarget((prev) => {prev + LOAD_LIMIT})
+                        }}
                     >
                         {'Load more ...'}
                     </Button>

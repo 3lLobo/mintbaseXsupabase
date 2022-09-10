@@ -40,8 +40,11 @@ const AuthPage = () => {
                 .then(() => uauth.user()) // .then((value) => dispatch(setUser({user: value}))))
                 .catch((error) => console.log(error))
                 .finally((value) => { 
-                    user_id = value
-                    dispatch(loginUser({id: value || '🐈‍⬛'}))
+
+                    if (value) {
+                        user_id = value
+                        dispatch(loginUser({id: value || '🐈‍⬛'}))
+                    }
                 }) //dispatch(loginUser({id: value || '🐈‍⬛'})))
         )
         // dispatch(loginUser({ id: user_id }))
