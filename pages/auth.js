@@ -49,7 +49,6 @@ const AuthPage = () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         const eth_addresses = (await provider.send("eth_requestAccounts", []))
         const signer = provider.getSigner()
-        console.log("🚀 ~ file: auth.js ~ line 45 ~ handleLogin ~ signer", signer)
 
         if (eth_addresses.length > 0) {
             const evm_address = eth_addresses[0]
