@@ -5,14 +5,14 @@ import { enableMapSet } from 'immer'
 import userSliceReducer from './userSlice'
 
 export const store = configureStore({
-  reducer: {
-    user: userSliceReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
-  // .concat(bridgeApi.middleware),
+    reducer: {
+        user: userSliceReducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
+    // .concat(bridgeApi.middleware),
 })
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors

@@ -9,12 +9,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { ethers } from 'ethers'
 import { AuthRedirect } from '../hooks/authUser'
 
-
 // .env from here https://github.com/unstoppabledomains/uauth/blob/main/examples/nextjs/.env
 const uauth = new UAuth({
-    clientID: "eb6179b7-3b34-4299-9a13-5e11d85ca74a",
+    clientID: 'eb6179b7-3b34-4299-9a13-5e11d85ca74a',
     // clientID: process.env.NEXT_PUBLIC_CLIENT_ID,
-    redirectUri: "https://nftea-base.netlify.app/auth",
+    redirectUri: 'https://nftea-base.netlify.app/auth',
     scope: 'openid email wallet',
 })
 
@@ -29,44 +28,40 @@ const AuthPage = () => {
 
     // Login with a popup and save the user
     const handleLogin = async () => {
-
         let user_id
         if (!uauth) {
             return
         }
-        await (
-            uauth
-                .loginWithPopup()
-                .then(() => uauth.user()) // .then((value) => dispatch(setUser({user: value}))))
-                .catch((error) => console.log(error))
-                .finally((value) => { 
-
-                    if (value) {
-                        user_id = value
-                        dispatch(loginUser({id: value || '🐈‍⬛'}))
-                    }
-                }) //dispatch(loginUser({id: value || '🐈‍⬛'})))
-        )
+        await uauth
+            .loginWithPopup()
+            .then(() => uauth.user()) // .then((value) => dispatch(setUser({user: value}))))
+            .catch((error) => console.log(error))
+            .finally((value) => {
+                if (value) {
+                    user_id = value
+                    dispatch(loginUser({ id: value || '🐈‍⬛' }))
+                }
+            }) //dispatch(loginUser({id: value || '🐈‍⬛'})))
         // dispatch(loginUser({ id: user_id }))
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-        const eth_addresses = (await provider.send("eth_requestAccounts", []))
+        const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+        const eth_addresses = await provider.send('eth_requestAccounts', [])
         const signer = provider.getSigner()
 
         if (eth_addresses.length > 0) {
             const evm_address = eth_addresses[0]
-            const msg = "AngryPandaPassword"
-            const signature = (await signer.signMessage(msg))
+            const msg = 'AngryPandaPassword'
+            const signature = await signer.signMessage(msg)
 
             if (signature) {
                 const evm_email = evm_address + '@angrypanda.nft'
-                console.log("log in to Supabase.")
+                console.log('log in to Supabase.')
                 const { error: loginError } = await supabase.auth.signIn({
                     email: evm_email,
                     password: signature,
                 })
                 if (loginError) {
-                    console.log("creating user in Supabase.")
+                    console.log('creating user in Supabase.')
                     const { user, session, error } = await supabase.auth.signUp({
                         email: evm_email,
                         password: signature,
@@ -83,9 +78,9 @@ const AuthPage = () => {
             <Head />
             <Box
                 className="authcontainer"
-            // w='2xl'
-            // mx={'auto'}
-            // my={'auto'}
+                // w='2xl'
+                // mx={'auto'}
+                // my={'auto'}
             >
                 <Card>
                     <Space direction="vertical" size={8}>
@@ -94,24 +89,25 @@ const AuthPage = () => {
                         </Box>
                         <Auth
                             supabaseClient={supabase}
-                            providers={['google',]}
+                            providers={['google']}
                             view={'sign_in'}
                             socialLayout="horizontal"
                             socialButtonSize="xlarge"
                             onlyThirdPartyProviders={true}
                         />
-                        <Box
-                        >
+                        <Box>
                             <button
                                 onMouseEnter={() => setSvgSrc('/unstopSvgButtons/hover-large.svg')}
-                                onMouseLeave={() => setSvgSrc('/unstopSvgButtons/default-large.svg')}
+                                onMouseLeave={() =>
+                                    setSvgSrc('/unstopSvgButtons/default-large.svg')
+                                }
                                 onClick={handleLogin}
-                                className='mx-auto'
+                                className="mx-auto"
                             >
                                 <Image
                                     src={svgSrc}
-                                // layout="fill"
-                                // height='100%'
+                                    // layout="fill"
+                                    // height='100%'
                                 />
                             </button>
                         </Box>

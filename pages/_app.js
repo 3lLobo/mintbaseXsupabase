@@ -5,7 +5,6 @@ import { extendTheme } from '@chakra-ui/react'
 import { store } from '../app/store'
 import { Provider } from 'react-redux'
 
-
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
 

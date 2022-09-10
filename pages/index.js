@@ -24,7 +24,6 @@ import UAuth from '@uauth/js'
 import { loginUser, reset } from '../app/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
 
-
 // .env from here https://github.com/unstoppabledomains/uauth/blob/main/examples/nextjs/.env
 const uauth = new UAuth({
     clientID: process.env.NEXT_PUBLIC_CLIENT_ID,
@@ -45,7 +44,7 @@ const OpenTab = ({ openFeed, mintbaseNetwork, favo }) => {
 }
 
 const Index = () => {
-    const {user} = useUser();
+    const { user } = useUser()
     const store = useSelector((state) => state.user)
     const dispatch = useDispatch()
 
@@ -72,12 +71,12 @@ const Index = () => {
             return
         }
         console.log('🐈‍⬛ logging out...')
-        await (uauth
+        await uauth
             .logout()
             // .then(() => )
             .catch((error) => console.log(error))
-            .finally(() => dispatch(reset())))
-        await (supabase.auth.signOut())
+            .finally(() => dispatch(reset()))
+        await supabase.auth.signOut()
     }
 
     const [mintbaseNetwork, setMintbaseNetwork] = useReducer(networkReducer, {
@@ -118,7 +117,7 @@ const Index = () => {
                 handleLogout={handleLogout}
             />
             <main>
-                { (user) ? (
+                {user ? (
                     // {true
                     <OpenTab openFeed={openFeed} mintbaseNetwork={mintbaseNetwork} favo={favo} />
                 ) : (

@@ -57,7 +57,7 @@ const Feed = ({ mintbaseNetwork, favo }) => {
     })
 
     useLayoutEffect(() => {
-        // Print Errors from gql query 
+        // Print Errors from gql query
         if (error) {
             console.log(`Error! ${error.message}`)
         }
@@ -67,7 +67,7 @@ const Feed = ({ mintbaseNetwork, favo }) => {
             const uniqueData = filterDups(data)
             const newUniqueLength = uniqueData.length
 
-            // Append new data 
+            // Append new data
             if (newUniqueLength > unique.length) {
                 setUnique(() => uniqueData)
 
@@ -76,10 +76,10 @@ const Feed = ({ mintbaseNetwork, favo }) => {
                     endRef.current.scrollIntoView({ behavior: 'smooth', alignToTop: true })
                 }
             }
-            
+
             // Check if enough data length meets taget, otherwise load more
             console.log(`loading more nfts. target:${target}  vs Loaded:${newUniqueLength} `)
-            if ((newUniqueLength < target) && loadMore) {
+            if (newUniqueLength < target && loadMore) {
                 setTimeout(() => {
                     setLoad('load more')
                 }, 1000)
@@ -107,7 +107,9 @@ const Feed = ({ mintbaseNetwork, favo }) => {
                         onClick={() => {
                             setLoad('load more')
                             setLoadMore(() => true)
-                            setTarget((prev) => {prev + LOAD_LIMIT})
+                            setTarget((prev) => {
+                                prev + LOAD_LIMIT
+                            })
                         }}
                     >
                         {'Load more ...'}

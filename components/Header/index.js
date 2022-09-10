@@ -10,9 +10,14 @@ import ToggleMode from './toggle-mode'
 import { Box, Text, DarkMode, Button, VStack } from '@chakra-ui/react'
 import { ToggleNetwork } from './toggleNetwork'
 
-
-export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, setOpenFeed, handleLogout }) {
-    const {user} = useUser();
+export default function Header({
+    mintbaseNetwork,
+    setMintbaseNetwork,
+    openFeed,
+    setOpenFeed,
+    handleLogout,
+}) {
+    const { user } = useUser()
 
     return (
         <Disclosure as="nav" className="bg-neutral-900 shadow-2xl z-10 opacity-100 sticky top-0 ">
@@ -39,7 +44,7 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, 
                                         alt="supabase"
                                     />
                                 </Box>
-                                {(user) &&
+                                {user && (
                                     <Box className="hidden sm:block sm:ml-6">
                                         <DarkMode>
                                             <Box className="flex space-x-4">
@@ -81,15 +86,16 @@ export default function Header({ mintbaseNetwork, setMintbaseNetwork, openFeed, 
                                             </Box>
                                         </DarkMode>
                                     </Box>
-                                }
+                                )}
                             </Box>
                             <Box className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                 {/** notifications */}
 
-                                {(user)
-                                    ? <MenuLogado user={user} handleLogout={handleLogout} />
-                                    : <MenuNotLogado />
-                                }
+                                {user ? (
+                                    <MenuLogado user={user} handleLogout={handleLogout} />
+                                ) : (
+                                    <MenuNotLogado />
+                                )}
                                 <ToggleMode />
                             </Box>
                         </Box>

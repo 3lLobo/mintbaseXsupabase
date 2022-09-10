@@ -8,7 +8,6 @@ import { supabase } from '../../utils/initSupabase'
 import { useSelector, useDispatch } from 'react-redux'
 
 const MenuLogado = ({ user, handleLogout }) => {
-
     const store = useSelector((state) => state.user)
 
     useEffect(() => {
@@ -29,7 +28,12 @@ const MenuLogado = ({ user, handleLogout }) => {
         }
     }, [user, supabase])
 
-    const user_name = user.user_metadata.full_name || user.email || store.user.id || window?.ethereum?.selectedAddress || 'AngryPanda'
+    const user_name =
+        user.user_metadata.full_name ||
+        user.email ||
+        store.user.id ||
+        window?.ethereum?.selectedAddress ||
+        'AngryPanda'
 
     return (
         <Menu as="div" className="ml-3 relative">
@@ -37,24 +41,25 @@ const MenuLogado = ({ user, handleLogout }) => {
                 <Box>
                     <Box className="flex flex-row w-40">
                         <DarkMode>
-                            <Text 
-                            className="mr-3 my-auto color-white text-slate-50 decoration-4 truncate text-xs"
-                            title={user_name}
+                            <Text
+                                className="mr-3 my-auto color-white text-slate-50 decoration-4 truncate text-xs"
+                                title={user_name}
                             >
                                 {user_name}
                             </Text>
                             <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                                 <span className="sr-only">Open user menu</span>
-                                {!user.avatar ?
+                                {!user.avatar ? (
                                     <Avatar
                                         h={8}
                                         w={8}
-                                        src='https://i.etsystatic.com/21689229/r/il/bce321/2406492170/il_570xN.2406492170_dgxu.jpg'
-                                        borderColor='slateblue'
+                                        src="https://i.etsystatic.com/21689229/r/il/bce321/2406492170/il_570xN.2406492170_dgxu.jpg"
+                                        borderColor="slateblue"
                                         showBorder={true}
                                     />
-                                    : <UserCircleIcon className="h-8 w-8 text-white" />
-                                }
+                                ) : (
+                                    <UserCircleIcon className="h-8 w-8 text-white" />
+                                )}
                             </Menu.Button>
                         </DarkMode>
                     </Box>
