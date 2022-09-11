@@ -34,15 +34,13 @@ const AuthPage = () => {
         }
         await uauth
             .loginWithPopup()
-            .then(() => uauth.user()) // .then((value) => dispatch(setUser({user: value}))))
+            .then(() => uauth.user())
             .catch((error) => console.log(error))
             .finally((value) => {
                 if (value) {
                     user_id = value
-                    dispatch(loginUser({ id: value || '🐈‍⬛' }))
                 }
             }) //dispatch(loginUser({id: value || '🐈‍⬛'})))
-        // dispatch(loginUser({ id: user_id }))
 
         const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
         const eth_addresses = await provider.send('eth_requestAccounts', [])
@@ -55,6 +53,7 @@ const AuthPage = () => {
 
             if (signature) {
                 const evm_email = evm_address + '@angrypanda.nft'
+                dispatch(loginUser({ id: user_id || evm_email }))
                 console.log('log in to Supabase.')
                 const { error: loginError } = await supabase.auth.signIn({
                     email: evm_email,
