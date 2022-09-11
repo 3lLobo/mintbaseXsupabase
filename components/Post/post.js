@@ -101,13 +101,13 @@ const Post = ({ nft, mintbaseNetwork, favo }) => {
                     ],
                 },
             })
-            console.log('Insterted Favo: ', userFavo)
+            console.log('Inserted Favo: ', userFavo)
         }
     }
 
     useEffect(() => {
         if (!nftDataLoading) {
-            if (data.nftCollection.edges.length > 0) {
+            if (data?.nftCollection.edges.length > 0) {
                 const supabaseData = data.nftCollection.edges[0].node
                 setNftData(supabaseData)
                 const supaComments = supabaseData.commentCollection.edges
@@ -381,7 +381,7 @@ const EnlargedPost = ({
                             // size="lg"
                             // colorScheme={isFavo ? "red" : "gray"}
                             // colorScheme="red"
-                            className="mr-auto w-9 mr-3 cursor-pointer"
+                            className="w-9 mr-3 cursor-pointer"
                             // icon={ }
                             isRound
                             onClick={onFavo}

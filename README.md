@@ -24,7 +24,6 @@ This leads me to round up with this description with a question to the Supabase 
 
 That being said, I hope you mint some dope NFTs of those trees so we can judge them here 🍵
 
-
 ### Live demo
 
 [nftea-base.netlify.app](https://nftea-base.netlify.app/)
@@ -36,4 +35,3 @@ That being said, I hope you mint some dope NFTs of those trees so we can judge t
 3. Create feed with like and comment option.
 4. Create supabase db with NFTid, likes, comment/by user.
 5. Option to chose NFT as avatar -> save ipfs url as avatar 🦊
-
