@@ -26,7 +26,6 @@ const Favos = ({ mintbaseNetwork, favo }) => {
 
     // TODO make a new query!
     const [unique, setUnique] = useState()
-    console.log('FAVO FEED: ', favo[0].toString())
 
     const { loading, error, data } = useQuery(GET_FAVOS, {
         client: mintbaseNetwork.client,

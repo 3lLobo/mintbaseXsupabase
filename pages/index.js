@@ -66,10 +66,10 @@ const Index = () => {
 
     // Logout and delete user
     const handleLogout = async () => {
-        if (!uauth) {
-            COnsole.log('🐈‍⬛ cannot log out!')
-            return
-        }
+        // if (!uauth) {
+        //     console.log('🐈‍⬛ cannot log out!')
+        //     return
+        // }
         console.log('🐈‍⬛ logging out...')
         await uauth
             .logout()
@@ -103,7 +103,6 @@ const Index = () => {
             }
         }
         getFavos()
-        console.log('Favo: ', favo)
     }, [user.id, mintbaseNetwork])
 
     return (
