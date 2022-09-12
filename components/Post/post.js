@@ -70,7 +70,6 @@ const Post = ({ nft, mintbaseNetwork, favo }) => {
         }
     }, [nft.thing.id, userFavo])
 
-    console.log('is Favo? ', isFavo)
     //  Click on the favorite button
     async function onFavo(event) {
         await isSupaNft()
@@ -288,8 +287,8 @@ const Post = ({ nft, mintbaseNetwork, favo }) => {
                                 rounded="lg"
                                 maxWidth={['100%', '400px', '225px']}
                                 margin="0 auto"
-                                src={nft.thing.metadata?.media}
-                                alt={'contentNftmedia' + nft.thing.id}
+                                src={nft.thing.metadata.media}
+                                alt={'Nftmedia' + nft.thing.metadata.media}
                                 objectFit="cover"
                                 className="hover:cursor-pointer"
                             />
@@ -381,7 +380,7 @@ const EnlargedPost = ({
                             // size="lg"
                             // colorScheme={isFavo ? "red" : "gray"}
                             // colorScheme="red"
-                            className="w-9 mr-3 cursor-pointer"
+                            className="w-9 mr-auto cursor-pointer"
                             // icon={ }
                             isRound
                             onClick={onFavo}

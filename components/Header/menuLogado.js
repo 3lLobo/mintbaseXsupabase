@@ -9,31 +9,24 @@ import { useSelector, useDispatch } from 'react-redux'
 
 const MenuLogado = ({ user, handleLogout }) => {
     const store = useSelector((state) => state.user)
+    const userName = user.user_metadata?.full_name || store.user.id || 'AngryPanda'
 
     useEffect(() => {
-        async function updateUsername() {
+        async function updateUsername({ userName }) {
             // console.log("Upadte User name: ", user.user_metadata.full_name)
             const { data, error } = await supabase
                 .from('users')
-                .update({ full_name: user.user_metadata?.full_name })
+                .update({ full_name: userName })
                 .eq('id', user.id)
 
             if (error) {
                 console.log('SupaError: ', error)
             }
         }
-
-        if (user.user_metadata?.full_name) {
-            updateUsername()
+        if (userName) {
+            updateUsername({ userName })
         }
     }, [user, supabase])
-
-    const user_name =
-        user.user_metadata.full_name ||
-        user.email ||
-        store.user.id ||
-        window?.ethereum?.selectedAddress ||
-        'AngryPanda'
 
     return (
         <Menu as="div" className="ml-3 relative">
@@ -43,9 +36,9 @@ const MenuLogado = ({ user, handleLogout }) => {
                         <DarkMode>
                             <Text
                                 className="mr-3 my-auto color-white text-slate-50 decoration-4 truncate text-xs"
-                                title={user_name}
+                                title={user.email}
                             >
-                                {user_name}
+                                {userName}
                             </Text>
                             <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                                 <span className="sr-only">Open user menu</span>

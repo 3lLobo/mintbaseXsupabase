@@ -1,6 +1,5 @@
 import { Box, Button } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
-import { SpinnerContainer } from '../spinnerContainer'
 
 // important ! reduce load time. lazyLoad feeder during fetch
 const LazyPosts = dynamic(() => import('../Post/post'), {
@@ -9,30 +8,22 @@ const LazyPosts = dynamic(() => import('../Post/post'), {
     ),
 })
 
-export const PostGrid = ({ loading, unique, mintbaseNetwork, favo }) => {
+export const PostGrid = ({ unique, mintbaseNetwork, favo }) => {
     return (
         <Box className="p-4 relative sm:px-10 ">
             <Box gap="20px" className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 ">
-                {loading ? (
-                    <SpinnerContainer />
-                ) : (
-                    unique?.map((nft) => {
-                        return (
-                            <div
-                                maxW={500}
-                                colSpan={1}
-                                className="flex flex-col hover:drop-shadow-lg"
-                            >
-                                <LazyPosts
-                                    mintbaseNetwork={mintbaseNetwork}
-                                    key={nft.thing.id}
-                                    nft={nft}
-                                    favo={favo}
-                                />
-                            </div>
-                        )
-                    })
-                )}
+                {unique?.map((nft) => {
+                    return (
+                        <div
+                            maxW={500}
+                            colSpan={1}
+                            className="flex flex-col hover:drop-shadow-lg"
+                            key={nft.thing.id}
+                        >
+                            <LazyPosts mintbaseNetwork={mintbaseNetwork} nft={nft} favo={favo} />
+                        </div>
+                    )
+                })}
             </Box>
         </Box>
     )

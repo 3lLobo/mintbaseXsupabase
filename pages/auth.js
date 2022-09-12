@@ -12,7 +12,7 @@ import { AuthRedirect } from '../hooks/authUser'
 // .env from here https://github.com/unstoppabledomains/uauth/blob/main/examples/nextjs/.env
 const uauth = new UAuth({
     clientID: 'eb6179b7-3b34-4299-9a13-5e11d85ca74a',
-    // clientID: process.env.NEXT_PUBLIC_CLIENT_ID,
+    // redirectUri: 'http://localhost:3000/auth',
     redirectUri: 'https://nftea-base.netlify.app/auth',
     scope: 'openid email wallet',
 })
@@ -32,15 +32,7 @@ const AuthPage = () => {
         if (!uauth) {
             return
         }
-        await uauth
-            .loginWithPopup()
-            .then(() => uauth.user())
-            .catch((error) => console.log(error))
-            .finally((value) => {
-                if (value) {
-                    user_id = value
-                }
-            }) //dispatch(loginUser({id: value || '🐈‍⬛'})))
+        await uauth.loginWithPopup()
 
         const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
         const eth_addresses = await provider.send('eth_requestAccounts', [])
@@ -52,8 +44,12 @@ const AuthPage = () => {
             const signature = await signer.signMessage(msg)
 
             if (signature) {
+                // set the username to ud domain if ud available, otherwise wallet address
                 const evm_email = evm_address + '@angrypanda.nft'
-                dispatch(loginUser({ id: user_id || evm_email }))
+                const id = JSON.parse(localStorage.username).value || evm_email
+                console.log('🚀 ~ file: auth.js ~ line 50 ~ handleLogin ~ id', id)
+                dispatch(loginUser({ id }))
+
                 console.log('log in to Supabase.')
                 const { error: loginError } = await supabase.auth.signIn({
                     email: evm_email,
